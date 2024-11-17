@@ -16,6 +16,7 @@ const {
   getCreatedNFTs,
   unfollowUser,
 } = require("../controllers/userController");
+const User = require("../models/User");
 
 const router = express.Router();
 
@@ -39,7 +40,7 @@ router.get("/profile/:userId", getUserProfileById);
 router.get("/", getAllUsers);
 router.post("/follow", followUser);
 router.post("/unfollow", unfollowUser);
-router.get("/:userId/followers", getFollowers);
+// router.get("/:userId/followers", getFollowers);
 router.get("/:userId/following", getFollowing);
 router.get("/:userId/follow-count", getFollowCount);
 router.get("/:userId/liked-nfts", getLikedNFTs);
