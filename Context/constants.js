@@ -5,7 +5,7 @@ import nftMarketplace from "./NFTMarketplace.json";
 // export const NFTMarketplaceAddress =
 //   "0x620C57A2C821b4680090393891cA49Bd715c4813";
   export const NFTMarketplaceAddress =
-  "0x5f7fEBEE00e20287712Cf6C95e21De741434a1fe";
+  "0x5FbDB2315678afecb367f032d93F642f64180aa3";
 //--------LOCALHOST
 // export const NFTMarketplaceAddress =
 //   "0x5FbDB2315678afecb367f032d93F642f64180aa3";
@@ -109,6 +109,6 @@ const changeNetwork = async ({ networkName }) => {
 };
 
 export const handleNetworkSwitch = async () => {
-  const networkName = "polygon_amoy";
+  const networkName = "localhost";
   await changeNetwork({ networkName });
 };
