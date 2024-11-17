@@ -1,37 +1,75 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import Image from "next/image";
-import { useRouter } from "next/router"; // Import useRouter from Next.js
+import { useRouter } from "next/router";
 import { MdVerified } from "react-icons/md";
 import { TiTick } from "react-icons/ti";
 import Style from "./FollowerTabCard.module.css";
-import images from "../../../img";
+import { NFTMarketplaceContext } from "../../../Context/NFTMarketplaceContext";
 
-const FollowerTabCard = ({ i, el }) => {
+const FollowerTabCard = ({ i, el, initialFollowing = [], onFollowStatusChange , relationType}) => {
+  const { followUser, unfollowUser, userId } = useContext(NFTMarketplaceContext);
+  const router = useRouter();
+
+  console.log(relationType);
+  
+  // States
   const [following, setFollowing] = useState(false);
-  const router = useRouter(); // Initialize router
 
-  const followMe = () => {
-    setFollowing(!following);
+  // Derived Values
+  const isOwnProfile = el.seller === userId;
+  const background = el.background || el.profileImage || "/default-background.jpg";
+  const profileImage = el.profileImage || el.background || "/default-profile.jpg";
+
+  // Initialize `following` state
+  useEffect(() => {
+    setFollowing(Array.isArray(initialFollowing) && initialFollowing.includes(el.seller));
+  }, [initialFollowing, el.seller]);
+
+  // Follow/Unfollow Handler
+  const toggleFollow = async (e) => {
+    e.stopPropagation(); // Prevents triggering the card click event
+    try {
+      let response;
+      if (following) {
+        response = await unfollowUser(el.seller);
+        if (response?.success) {
+          setFollowing(false);
+          onFollowStatusChange?.("Unfollowed");
+        }
+      } else {
+        response = await followUser(el.seller);
+        if (response?.success) {
+          setFollowing(true);
+          onFollowStatusChange?.("Followed");
+        }
+      }
+    } catch (error) {
+      console.error("Error toggling follow status:", error);
+    }
   };
 
+  // Navigate to user detail page
   const redirectToDetailPage = () => {
     router.push({
-      pathname: '/detailUser',
-      query: { seller: el.seller }, // Pass seller ID as a query parameter
+      pathname: "/detailUser",
+      query: { seller: el.seller },
     });
   };
 
   return (
     <div className={Style.FollowerTabCard} onClick={redirectToDetailPage}>
       <div className={Style.FollowerTabCard_rank}>
-        <p>#{i + 1} <span>🥇</span></p>
+        <p>
+          #{i + 1} <span>🥇</span>
+        </p>
       </div>
 
       <div className={Style.FollowerTabCard_box}>
+        {/* Background Image */}
         <div className={Style.FollowerTabCard_box_img}>
           <Image
             className={Style.FollowerTabCard_box_img_img}
-            src={el.background || images[`creatorbackground${i + 1}`]}
+            src={background}
             alt="profile background"
             width={500}
             height={300}
@@ -39,20 +77,22 @@ const FollowerTabCard = ({ i, el }) => {
           />
         </div>
 
+        {/* Profile Image */}
         <div className={Style.FollowerTabCard_box_profile}>
           <Image
             className={Style.FollowerTabCard_box_profile_img}
             alt="profile picture"
             width={50}
             height={50}
-            src={el.user || images[`user${i + 1}`]}
+            src={profileImage}
           />
         </div>
 
+        {/* Info Section */}
         <div className={Style.FollowerTabCard_box_info}>
           <div className={Style.FollowerTabCard_box_info_name}>
             <h4>
-              {el.seller.slice(0, 9)}
+              {el.user || "Unnamed User"}
               <span>
                 <MdVerified />
               </span>
@@ -60,13 +100,20 @@ const FollowerTabCard = ({ i, el }) => {
             <p>{el.total || 0} ETH</p>
           </div>
 
+          {/* Follow/Unfollow Button */}
           <div className={Style.FollowerTabCard_box_info_following}>
-            <a onClick={(e) => { e.stopPropagation(); followMe(); }}>
-              {following ? 'Following' : 'Follow'}
+            <button
+              onClick={(e) => toggleFollow(e)}
+              style={{
+                pointerEvents: isOwnProfile ? "none" : "auto",
+                opacity: isOwnProfile ? 0.5 : 1,
+              }}
+            >
+              {isOwnProfile ? "You" : following ? "Unfollow" : "Follow"}
               <span>
                 <TiTick />
               </span>
-            </a>
+            </button>
           </div>
         </div>
       </div>
