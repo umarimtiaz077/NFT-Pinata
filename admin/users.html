@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>NFT Marketplace Admin Panel - Users</title>
+  <script src="script.js"></script>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Font Awesome -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+  
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet"/>
+  
+  <!-- Custom CSS -->
+  <link href="assets/css/styles.css" rel="stylesheet"/>
+</head>
+<body class="bg-gray-100 font-roboto">
+  <div class="min-h-screen flex flex-col md:flex-row">
+    <!-- Sidebar -->
+    <nav class="bg-black w-full md:w-64 shadow-lg">
+      <div class="p-6">
+        <a class="text-3xl font-bold text-yellow-500" href="index.html">
+          Admin Panel
+        </a>
+      </div>
+      <ul class="mt-8">
+        <li class="px-6 py-3">
+          <a class="text-yellow-500 hover:text-yellow-300 flex items-center" href="index.html">
+            <i class="fas fa-tachometer-alt mr-3"></i>
+            Dashboard
+          </a>
+        </li>
+        <li class="px-6 py-3">
+          <a class="text-yellow-500 hover:text-yellow-300 flex items-center" href="users.html">
+            <i class="fas fa-users mr-3"></i>
+            Users
+          </a>
+        </li>
+        <li class="px-6 py-3">
+          <a class="text-yellow-500 hover:text-yellow-300 flex items-center" href="nft-listings.html">
+            <i class="fas fa-th-list mr-3"></i>
+            NFT Listings
+          </a>
+        </li>
+        <li class="px-6 py-3">
+          <a class="text-yellow-500 hover:text-yellow-300 flex items-center" href="queries.html">
+            <i class="fas fa-question-circle mr-3"></i>
+            Queries
+          </a>
+        </li>
+        <li class="px-6 py-3">
+          <a class="text-yellow-500 hover:text-yellow-300 flex items-center" href="notifications.html">
+            <i class="fas fa-bell mr-3"></i>
+            Notifications
+          </a>
+        </li>
+   <li class="px-6 py-3">
+  <a
+    id="logoutLink"
+    class="text-yellow-500 hover:text-yellow-300 flex items-center"
+    href="login.html"
+  >
+    <i class="fas fa-sign-out-alt mr-3"></i>
+    Logout
+  </a>
+</li>
+
+
+      </ul>
+    </nav>
+    
+    <!-- Main Content -->
+    <main class="flex-grow p-6">
+      <!-- Admin Details -->
+      <div class="flex justify-between items-center mb-8 bg-black p-6 rounded-lg shadow-md">
+        <div>
+          <h1 class="text-4xl font-bold text-yellow-500">
+            Welcome, <span id="admin-name">Admin</span>
+          </h1>
+          <p class="text-yellow-300" id="admin-email">
+            admin@example.com
+          </p>
+        </div>
+        <div class="flex items-center space-x-4">
+          <img alt="Admin profile picture" class="w-16 h-16 rounded-full object-cover border-2 border-yellow-500" height="100" id="admin-profile-img" src="assets/images/admin-profile.jpg" width="100"/>
+          <div>
+            <p class="text-yellow-500 font-semibold" id="admin-username">
+              Admin Name
+            </p>
+            <p class="text-yellow-300">
+              Role: Super Admin
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <section class="mb-8" id="users">
+        <h2 class="text-3xl font-bold mb-4 text-black">
+          Registered Users
+        </h2>
+        <div class="bg-white p-6 rounded-lg shadow-md overflow-x-auto">
+          <table class="min-w-full bg-white">
+            <thead>
+              <tr>
+                <th class="py-3 px-4 border-b">Username</th>
+                <th class="py-3 px-4 border-b">Email</th>
+                <th class="py-3 px-4 border-b">ID</th>
+                <th class="py-3 px-4 border-b">Wallet Address</th>
+                <th class="py-3 px-4 border-b">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="users-list">
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  </div>
+  
+  <script>
+
+    async function loadUserData() {
+      try {
+        const response = await fetch("http://localhost:5000/api/users");
+        const data = await response.json();
+
+        if (data && data.length > 0) {
+          const usersList = document.getElementById("users-list");
+          usersList.innerHTML = '';  
+
+          data.forEach(user => {
+            usersList.innerHTML += `
+              <tr>
+                <td class="py-3 px-4 border-b text-center">${user.username}</td>
+                <td class="py-3 px-4 border-b text-center">${user.email}</td>
+                <td class="py-3 px-4 border-b text-center">${user._id}</td>
+                <td class="py-3 px-4 border-b text-center">${user.walletAddress}</td>
+                <td class="py-3 px-4 border-b text-center">
+                  <button class="text-red-600 hover:text-red-800">Ban</button>
+                  <button class="text-green-600 hover:text-green-800">Reactivate</button>
+                </td>
+              </tr>
+            `;
+          });
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    }
+
+    
+    document.addEventListener("DOMContentLoaded", loadUserData);
+  </script>
+
+  <script src="assets/js/script.js"></script>
+</body>
+</html>
