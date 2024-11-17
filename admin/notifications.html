@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NFT Marketplace Admin Panel - Notifications</title>
+    <script src="script.js"></script>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Font Awesome -->
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+      rel="stylesheet"
+    />
+
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Custom CSS -->
+    <link href="assets/css/styles.css" rel="stylesheet" />
+  </head>
+  <body class="bg-gray-100 font-roboto">
+    <div class="min-h-screen flex flex-col md:flex-row">
+      <!-- Sidebar -->
+      <nav class="bg-black w-full md:w-64 shadow-lg">
+        <div class="p-6">
+          <a class="text-3xl font-bold text-yellow-500" href="index.html">
+            Admin Panel
+          </a>
+        </div>
+        <ul class="mt-8">
+          <li class="px-6 py-3">
+            <a
+              class="text-yellow-500 hover:text-yellow-300 flex items-center"
+              href="index.html"
+            >
+              <i class="fas fa-tachometer-alt mr-3"></i>
+              Dashboard
+            </a>
+          </li>
+          <li class="px-6 py-3">
+            <a
+              class="text-yellow-500 hover:text-yellow-300 flex items-center"
+              href="users.html"
+            >
+              <i class="fas fa-users mr-3"></i>
+              Users
+            </a>
+          </li>
+          <li class="px-6 py-3">
+            <a
+              class="text-yellow-500 hover:text-yellow-300 flex items-center"
+              href="nft-listings.html"
+            >
+              <i class="fas fa-th-list mr-3"></i>
+              NFT Listings
+            </a>
+          </li>
+          <li class="px-6 py-3">
+            <a
+              class="text-yellow-500 hover:text-yellow-300 flex items-center"
+              href="queries.html"
+            >
+              <i class="fas fa-question-circle mr-3"></i>
+              Queries
+            </a>
+          </li>
+          <li class="px-6 py-3">
+            <a
+              class="text-yellow-500 hover:text-yellow-300 flex items-center"
+              href="notifications.html"
+            >
+              <i class="fas fa-bell mr-3"></i>
+              Notifications
+            </a>
+          </li>
+          <li class="px-6 py-3">
+            <a
+              class="text-yellow-500 hover:text-yellow-300 flex items-center"
+              href="#"
+            >
+              <i class="fas fa-sign-out-alt mr-3"></i>
+              Logout
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <!-- Main Content -->
+      <main class="flex-grow p-6">
+        <!-- Admin Details -->
+        <div
+          class="flex justify-between items-center mb-8 bg-black p-6 rounded-lg shadow-md"
+        >
+          <div>
+            <h1 class="text-4xl font-bold text-yellow-500">Welcome, Admin</h1>
+            <p class="text-yellow-300">admin@example.com</p>
+          </div>
+          <div class="flex items-center space-x-4">
+            <img
+              alt="Admin profile picture"
+              class="w-16 h-16 rounded-full object-cover border-2 border-yellow-500"
+              height="100"
+              src="assets/images/admin-profile.jpg"
+              width="100"
+            />
+            <div>
+              <p class="text-yellow-500 font-semibold">Admin Name</p>
+              <p class="text-yellow-300">Role: Super Admin</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Notifications -->
+        <section class="mb-8" id="notifications">
+          <h2 class="text-3xl font-bold mb-4 text-black">Send Notifications</h2>
+          <div class="bg-white p-6 rounded-lg shadow-md">
+            <form onsubmit="sendNotification(event)">
+              <div class="mb-4">
+                <label class="block text-gray-700" for="subject">Subject</label>
+                <input
+                  class="w-full p-3 border rounded-md"
+                  id="subject"
+                  name="subject"
+                  placeholder="Notification Subject"
+                  type="text"
+                  required
+                />
+              </div>
+              <div class="mb-4">
+                <label class="block text-gray-700" for="content">Content</label>
+                <textarea
+                  class="w-full p-3 border rounded-md"
+                  id="content"
+                  name="content"
+                  placeholder="Notification Content"
+                  rows="4"
+                  required
+                ></textarea>
+              </div>
+              <div class="mb-4">
+                <label class="block text-gray-700" for="attachment"
+                  >Attachment</label
+                >
+                <input
+                  class="w-full p-3 border rounded-md"
+                  id="attachment"
+                  name="attachment"
+                  type="file"
+                />
+              </div>
+              <div class="mb-4">
+                <label class="block text-gray-700" for="target"
+                  >Target Users</label
+                >
+                <select
+                  class="w-full p-3 border rounded-md"
+                  id="target"
+                  name="target"
+                  required
+                >
+                  <option value="all">All Users</option>
+                  <option value="active">Active Users</option>
+                  <option value="inactive">Inactive Users</option>
+                </select>
+              </div>
+              <button
+                class="bg-yellow-500 text-black px-4 py-2 rounded-md hover:bg-yellow-600 transition duration-200"
+                type="submit"
+              >
+                Send Notification
+              </button>
+            </form>
+          </div>
+        </section>
+      </main>
+    </div>
+    <script>
+      async function sendNotification(event) {
+        event.preventDefault(); // Prevent the form from refreshing the page
+
+        const formData = new FormData(event.target);
+
+        const payload = {
+          subject: formData.get("subject"),
+          message: formData.get("content"),
+
+          // target: formData.get("target")
+        };
+
+        // Sending request to the server
+        try {
+          const response = await fetch(
+            "http://localhost:5000/api/email/send-to-all",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(payload),
+            }
+          );
+
+          if (response.ok) {
+            alert("Notification sent successfully!");
+          } else {
+            alert("Failed to send notification.");
+          }
+        } catch (error) {
+          console.error("Error:", error);
+          alert("An error occurred while sending the notification.");
+        }
+      }
+    </script>
+    <!-- Custom JavaScript -->
+    <script src="assets/js/script.js"></script>
+  </body>
+</html>
