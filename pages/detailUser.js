@@ -14,6 +14,7 @@ import { NFTMarketplaceContext } from "../Context/NFTMarketplaceContext";
 import LikeNFTCardTwo from "../collectionPage/NFTCardTwo/LikeNFTCard";
 import UserTaps from "../authorPage/AuthorTaps/UserTaps";
 import LikeNFTCard from "../collectionPage/NFTCardTwo/MyLikeNFT";
+import FollowerTabCard from "../components/FollowerTab/FollowerTabCard/FollowerTabCard";
 
 const DetailUser = () => {
   const router = useRouter();
