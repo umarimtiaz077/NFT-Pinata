@@ -12,7 +12,7 @@ import axios from "axios";
 import { NFTMarketplaceContext } from "../Context/NFTMarketplaceContext";
 
 const Author = () => {
-  const { fetchMyNFTsOrListedNFTs, currentAccount, followUser, unfollowUser } =
+  const { fetchMyNFTsOrListedNFTs, currentAccount, followUser, unfollowUser, wallet_address } =
     useContext(NFTMarketplaceContext);
 
   const [nfts, setNfts] = useState([]);
@@ -22,6 +22,40 @@ const Author = () => {
   const [followingProfiles, setFollowingProfiles] = useState([]);
   const [activeTab, setActiveTab] = useState("Listed NFTs");
 
+  
+    const fetchFollowers = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:5000/api/users/${profileData._id}/followers`
+        );
+        const Followers = response.data.map((followers) => ({
+          ...followers,
+          seller: followers._id,
+          user: followers.username || "Unnamed User",
+        }));
+        setFollowerProfiles(Followers);
+        // setFollowingProfiles([]); // Clear other list when switching tabs
+      } catch (error) {
+        console.error("Error fetching followers:", error);
+      }
+    };
+  
+    const fetchFollowing = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:5000/api/users/${profileData._id}/following`
+        );
+        const standardizedFollowing = response.data.map((following) => ({
+          ...following,
+          seller: following._id,
+          user: following.username || "Unnamed User",
+        }));
+        setFollowingProfiles(standardizedFollowing);
+        // setFollowerProfiles([]);
+      } catch (error) {
+        console.error("Error fetching following:", error);
+      }
+    };
   useEffect(() => {
     fetchMyNFTsOrListedNFTs("fetchItemsListed").then(setNfts);
     fetchMyNFTsOrListedNFTs("fetchMyNFTs").then(setMyNFTs);
@@ -39,47 +73,24 @@ const Author = () => {
       }
     };
     if (currentAccount) fetchProfileData();
+    fetchFollowers();
+    fetchFollowing();
+    console.log(profileData, "this is profile data");
+    console.log(followerProfiles, "this is follower profiles");
+    console.log(followingProfiles, "this is following profiles");
+    
   }, [currentAccount]);
-
-  const fetchFollowers = async () => {
-    try {
-      const response = await axios.get(
-        `http://localhost:5000/api/users/${profileData._id}/followers`
-      );
-      const standardizedFollowers = response.data.map((follower) => ({
-        ...follower,
-        seller: follower._id,
-        user: follower.username || "Unnamed User",
-      }));
-      setFollowerProfiles(standardizedFollowers);
-      setFollowingProfiles([]); // Clear other list when switching tabs
-    } catch (error) {
-      console.error("Error fetching followers:", error);
-    }
-  };
-
-  const fetchFollowing = async () => {
-    try {
-      const response = await axios.get(
-        `http://localhost:5000/api/users/${profileData._id}/following`
-      );
-      const standardizedFollowing = response.data.map((following) => ({
-        ...following,
-        seller: following._id,
-        user: following.username || "Unnamed User",
-      }));
-      setFollowingProfiles(standardizedFollowing);
-      setFollowerProfiles([]);
-    } catch (error) {
-      console.error("Error fetching following:", error);
-    }
-  };
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);
     if (tab === "Followers") fetchFollowers();
     else if (tab === "Following") fetchFollowing();
+    // console.log(profileData, "this is profile data");
+    console.log(followerProfiles, "this is follower profiles");
+    // console.log(followingProfiles, "this is following profiles");
+
   };
+
 
   return (
     <div className={Style.author}>
@@ -99,16 +110,22 @@ const Author = () => {
 
       <AuthorTaps activeTab={activeTab} onTabClick={handleTabClick} />
 
-      {["Listed NFTs", "Own NFT", "Liked"].includes(activeTab) && (
+      {["Listed NFTs", "Own NFT"].includes(activeTab) && (
         <AuthorNFTCardBox
           collectiables={activeTab === "Listed NFTs"}
           created={activeTab === "Own NFT"}
-          like={activeTab === "Liked"}
+          like={false}
           follower={false}
           following={false}
           nfts={nfts}
           myNFTS={myNFTs}
         />
+      )}
+
+
+      
+      {activeTab === "Liked" && (
+        <LikeNFTCard wallet_address={wallet_address} NFTData={nfts} />
       )}
 
       <Title
@@ -117,8 +134,8 @@ const Author = () => {
       />
 
       <div className={Style.author_box}>
-        {(activeTab === "Followers"
-          ? followerProfiles
+        {/* {(activeTab === "Followers"
+          ? followingProfiles
           : activeTab === "Following"
           ? followingProfiles
           : []
@@ -130,7 +147,27 @@ const Author = () => {
             relationType={activeTab === "Followers" ? "follower" : "following"}
             onFollowStatusChange={handleTabClick} 
           />
-        ))}
+        ))} */}
+      {activeTab === "Followers" && followerProfiles.map((profile, i) => (
+            <FollowerTabCard
+              key={profile._id || i}
+              i={i}
+              el={profile}
+              // relationType={activeTab === "Followers" ? "follower" : "following"}
+              onFollowStatusChange={handleTabClick} 
+            />
+          
+      ))}
+      {activeTab === "Following" && followingProfiles.map((profile, i) => (
+            <FollowerTabCard
+              key={profile._id || i}
+              i={i}
+              el={profile}
+              // relationType={activeTab === "Followers" ? "follower" : "following"}
+              onFollowStatusChange={handleTabClick} 
+            />
+          
+      ))}
       </div>
 
       <Brand />
