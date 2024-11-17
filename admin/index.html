@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NFT Marketplace Admin Panel - Dashboard</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="script.js"></script>
+
+    <!-- Font Awesome -->
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+      rel="stylesheet"
+    />
+
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Custom CSS -->
+    <link href="assets/css/styles.css" rel="stylesheet" />
+  </head>
+  <body class="bg-gray-100 font-roboto">
+    <div class="min-h-screen flex flex-col md:flex-row">
+      <!-- Sidebar -->
+      <nav class="bg-black w-full md:w-64 shadow-lg">
+        <div class="p-6">
+          <a class="text-3xl font-bold text-yellow-500" href="index.html">
+            Admin Panel
+          </a>
+        </div>
+        <ul class="mt-8">
+          <li class="px-6 py-3">
+            <a
+              class="text-yellow-500 hover:text-yellow-300 flex items-center"
+              href="index.html"
+            >
+              <i class="fas fa-tachometer-alt mr-3"></i>
+              Dashboard
+            </a>
+          </li>
+          <li class="px-6 py-3">
+            <a
+              class="text-yellow-500 hover:text-yellow-300 flex items-center"
+              href="users.html"
+            >
+              <i class="fas fa-users mr-3"></i>
+              Users
+            </a>
+          </li>
+          <li class="px-6 py-3">
+            <a
+              class="text-yellow-500 hover:text-yellow-300 flex items-center"
+              href="nft-listings.html"
+            >
+              <i class="fas fa-th-list mr-3"></i>
+              NFT Listings
+            </a>
+          </li>
+          <li class="px-6 py-3">
+            <a
+              class="text-yellow-500 hover:text-yellow-300 flex items-center"
+              href="queries.html"
+            >
+              <i class="fas fa-question-circle mr-3"></i>
+              Queries
+            </a>
+          </li>
+          <li class="px-6 py-3">
+            <a
+              class="text-yellow-500 hover:text-yellow-300 flex items-center"
+              href="notifications.html"
+            >
+              <i class="fas fa-bell mr-3"></i>
+              Notifications
+            </a>
+          </li>
+          <li class="px-6 py-3">
+            <a
+              id="logoutLink"
+              class="text-yellow-500 hover:text-yellow-300 flex items-center"
+              href="login.html"
+            >
+              <i class="fas fa-sign-out-alt mr-3"></i>
+              Logout
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <!-- Main Content -->
+      <main class="flex-grow p-6">
+        <!-- Admin Details -->
+        <div
+          class="flex justify-between items-center mb-8 bg-black p-6 rounded-lg shadow-md"
+        >
+          <div>
+            <h1 class="text-4xl font-bold text-yellow-500">Welcome, Admin</h1>
+            <p class="text-yellow-300">admin@example.com</p>
+          </div>
+          <div class="flex items-center space-x-4">
+            <img
+              alt="Admin profile picture"
+              class="w-16 h-16 rounded-full object-cover border-2 border-yellow-500"
+              height="100"
+              src="assets/images/admin-profile.jpg"
+              width="100"
+            />
+            <div>
+              <p class="text-yellow-500 font-semibold">Admin Name</p>
+              <p class="text-yellow-300">Role: Super Admin</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Dashboard -->
+        <section class="mb-8" id="dashboard">
+          <h2 class="text-3xl font-bold mb-4 text-black">Dashboard</h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div
+              class="bg-yellow-500 p-6 rounded-lg shadow-md hover:shadow-lg transition duration-200"
+            >
+              <h3 class="text-lg font-semibold text-black">Total Users</h3>
+              <p id="userCount" class="text-3xl font-bold text-black">1,234</p>
+            </div>
+            <div
+              class="bg-yellow-500 p-6 rounded-lg shadow-md hover:shadow-lg transition duration-200"
+            >
+              <h3 class="text-lg font-semibold text-black">NFT Listings</h3>
+              <p id="nftCount" class="text-3xl font-bold text-black"></p>
+            </div>
+            <div
+              class="bg-yellow-500 p-6 rounded-lg shadow-md hover:shadow-lg transition duration-200"
+            >
+              <h3 class="text-lg font-semibold text-black">Queries</h3>
+              <p id="queryCount" class="text-3xl font-bold text-black"></p>
+            </div>
+            <!-- <div class="bg-yellow-500 p-6 rounded-lg shadow-md hover:shadow-lg transition duration-200">
+            <h3 class="text-lg font-semibold text-black">
+              Notifications Sent
+            </h3>
+            <p class="text-3xl font-bold text-black">
+              45
+            </p>
+          </div> -->
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script>
+      // Function to fetch data and count the number of objects
+      async function countDataFromAPI(url, elementId) {
+        try {
+          const response = await fetch(url);
+          const data = await response.json();
+
+          // Assuming the response is an array, count the length
+          const count = Array.isArray(data) ? data.length : 0;
+
+          // Update the DOM with the count
+          const element = document.querySelector(`#${elementId}`);
+          if (element) {
+            element.textContent = ` ${count}`;
+          }
+        } catch (error) {
+          console.error("Error fetching data:", error);
+        }
+      }
+
+      // Call the function for each API endpoint
+      document.addEventListener("DOMContentLoaded", function () {
+        countDataFromAPI("http://localhost:5000/api/users", "userCount");
+        countDataFromAPI("http://localhost:5000/api/nfts", "nftCount");
+        countDataFromAPI(
+          "http://localhost:5000/api/email/all-queries",
+          "queryCount"
+        );
+      });
+    </script>
+
+    <!-- Custom JavaScript -->
+    <script src="assets/js/script.js"></script>
+  </body>
+</html>
