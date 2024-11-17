@@ -1,48 +1,38 @@
 import React from "react";
 import Image from "next/image";
-import {
-  TiSocialFacebook,
-  TiSocialLinkedin,
-  TiSocialTwitter,
-  TiSocialInstagram,
-} from "react-icons/ti";
+import { TiSocialFacebook, TiSocialLinkedin, TiSocialTwitter, TiSocialInstagram } from "react-icons/ti";
 
-//INTERNAL IMPORT
+// INTERNAL IMPORT
 import Style from "./collectionProfile.module.css";
-import images from "../../img";
 
-const collectionProfile = () => {
-  const cardArray = [1, 2, 3, 4];
+const CollectionProfile = ({ collection }) => {
   return (
     <div className={Style.collectionProfile}>
       <div className={Style.collectionProfile_box}>
         <div className={Style.collectionProfile_box_left}>
           <Image
-            src={images.nft_image_1}
-            alt="nft image"
+            src={collection.image || "/placeholder-image.jpg"} // Display the collection's image
+            alt="Collection Image"
             width={800}
             height={800}
             className={Style.collectionProfile_box_left_img}
           />
-
-          
         </div>
 
         <div className={Style.collectionProfile_box_middle}>
-          <h1>Awesome NFTs Collection</h1>
-          <p>
-            Karafuru is home to 5,555 generative arts where colors reign
-            supreme. Leave the drab reality and enter the world of Karafuru by
-            Museum of Toys.
-          </p>
-        
-
-
-           
+          <h1>{collection.name || "Unnamed Collection"}</h1>
+          <p>{collection.description || "No description provided."}</p>
+          <div className={Style.collectionProfile_box_social}>
+            {/* Social Media Icons */}
+            <TiSocialFacebook />
+            <TiSocialTwitter />
+            <TiSocialLinkedin />
+            <TiSocialInstagram />
+          </div>
         </div>
       </div>
     </div>
   );
 };
 
-export default collectionProfile;
+export default CollectionProfile;
