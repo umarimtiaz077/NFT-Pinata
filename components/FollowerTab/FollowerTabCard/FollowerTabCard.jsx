@@ -10,7 +10,7 @@ const FollowerTabCard = ({ i, el, initialFollowing = [], onFollowStatusChange , 
   const { followUser, unfollowUser, userId } = useContext(NFTMarketplaceContext);
   const router = useRouter();
 
-  console.log(relationType);
+  // console.log(relationType);
   
   // States
   const [following, setFollowing] = useState(false);
