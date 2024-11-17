@@ -6,6 +6,8 @@
 
 .Form_box_input{
     margin-top: 2rem;
+    width: 100%;
+
 }
 
 .Form_box_input label{
@@ -22,7 +24,6 @@
     padding: 1rem;
     border-radius: 1rem;
     background-color: transparent;
-    margin-top: .5rem;
     outline: none;
 }
 
