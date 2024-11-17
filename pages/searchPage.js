@@ -11,6 +11,7 @@ import images from "../img";
 
 //SMART CONTRACT IMPORT
 import { NFTMarketplaceContext } from "../Context/NFTMarketplaceContext";
+import FilterNFTCardTwo from "../collectionPage/NFTCardTwo/FilterNFTList";
 
 const searchPage = () => {
   const { fetchNFTs, setError, currentAccount } = useContext(
@@ -23,6 +24,8 @@ const searchPage = () => {
     try {
       if (currentAccount) {
         fetchNFTs().then((items) => {
+          console.log("items are...", items);
+
           setNfts(items?.reverse());
           setNftsCopy(items);
           console.log(nfts);
@@ -33,44 +36,37 @@ const searchPage = () => {
     }
   }, [currentAccount]);
 
-  const onHandleSearch = (value) => {
-    const filteredNFTS = nfts.filter(({ name }) =>
-      name.toLowerCase().includes(value.toLowerCase())
-    );
+  const [sortOrder, setSortOrder] = useState("asc"); // Initial sort order
 
-    if (filteredNFTS.length === 0) {
-      setNfts(nftsCopy);
-    } else {
-      setNfts(filteredNFTS);
-    }
+  const toggleSortOrder = () => {
+    setSortOrder((prevOrder) => (prevOrder === "asc" ? "desc" : "asc"));
   };
 
-  const onClearSearch = () => {
-    if (nfts.length && nftsCopy.length) {
-      setNfts(nftsCopy);
-    }
-  };
-
-  // const collectionArray = [
-  //   images.nft_image_1,
-  //   images.nft_image_2,
-  //   images.nft_image_3,
-  //   images.nft_image_1,
-  //   images.nft_image_2,
-  //   images.nft_image_3,
-  //   images.nft_image_1,
-  //   images.nft_image_2,
-  // ];
   return (
     <div className={Style.searchPage}>
       <Banner bannerImage={images.creatorbackground2} />
-      <SearchBar
+      {/* <SearchBar
         onHandleSearch={onHandleSearch}
         onClearSearch={onClearSearch}
-      />
-      <Filter />
-      {nfts?.length == 0 ? <Loader /> : <NFTCardTwo NFTData={nfts} />}
-     
+      /> */}
+      {/* <Filter /> */}
+      <div
+        className={Style.searchPage_box}
+        style={{ display: "flex", justifyContent: "flex-end" }}
+      >
+        <button
+          onClick={toggleSortOrder}
+          style={{ marginBottom: "20px", padding: "10px", textAlign: "center" }}
+        >
+          Sort {sortOrder === "asc" ? "Descending" : "Ascending"}
+        </button>
+      </div>
+      {/* NFT Display */}
+      {nfts?.length === 0 ? (
+        <Loader />
+      ) : (
+        <FilterNFTCardTwo sortOrder={sortOrder} NFTData={nfts} />
+      )}
       <Brand />
     </div>
   );

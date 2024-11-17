@@ -1,113 +1,135 @@
 import React, { useState, useEffect, useContext } from "react";
-
-//INTERNAL IMPORT
 import Style from "../styles/author.module.css";
-import { Banner, NFTCardTwo } from "../collectionPage/collectionIndex";
+import { Banner } from "../collectionPage/collectionIndex";
 import { Brand, Title } from "../components/componentsindex";
 import FollowerTabCard from "../components/FollowerTab/FollowerTabCard/FollowerTabCard";
-import images from "../img";
 import {
   AuthorProfileCard,
   AuthorTaps,
   AuthorNFTCardBox,
 } from "../authorPage/componentIndex";
-
-//IMPORT SMART CONTRACT DATA
+import axios from "axios";
 import { NFTMarketplaceContext } from "../Context/NFTMarketplaceContext";
 
-const author = () => {
-  const followerArray = [
-    {
-      background: images.creatorbackground1,
-      user: images.user1,
-      seller: "7d64gf748849j47fy488444",
-    },
-    {
-      background: images.creatorbackground2,
-      user: images.user2,
-      seller: "7d64gf748849j47fy488444",
-    },
-    {
-      background: images.creatorbackground3,
-      user: images.user3,
-      seller: "7d64gf748849j47fy488444",
-    },
-    {
-      background: images.creatorbackground4,
-      user: images.user4,
-      seller: "7d64gf748849j47fy488444",
-    },
-    {
-      background: images.creatorbackground5,
-      user: images.user5,
-      seller: "7d64gf748849j47fy488444",
-    },
-    {
-      background: images.creatorbackground6,
-      user: images.user6,
-      seller: "7d64gf748849j47fy488444",
-    },
-  ];
-
-  const [collectiables, setCollectiables] = useState(true);
-  const [created, setCreated] = useState(false);
-  const [like, setLike] = useState(false);
-  const [follower, setFollower] = useState(false);
-  const [following, setFollowing] = useState(false);
-
-  //IMPORT SMART CONTRACT DATA
-  const { fetchMyNFTsOrListedNFTs, currentAccount } = useContext(
-    NFTMarketplaceContext
-  );
+const Author = () => {
+  const { fetchMyNFTsOrListedNFTs, currentAccount, followUser, unfollowUser } =
+    useContext(NFTMarketplaceContext);
 
   const [nfts, setNfts] = useState([]);
   const [myNFTs, setMyNFTs] = useState([]);
+  const [profileData, setProfileData] = useState(null);
+  const [followerProfiles, setFollowerProfiles] = useState([]);
+  const [followingProfiles, setFollowingProfiles] = useState([]);
+  const [activeTab, setActiveTab] = useState("Listed NFTs");
 
   useEffect(() => {
-    fetchMyNFTsOrListedNFTs("fetchItemsListed").then((items) => {
-      setNfts(items);
-
-      console.log(nfts);
-    });
-  }, []);
+    fetchMyNFTsOrListedNFTs("fetchItemsListed").then(setNfts);
+    fetchMyNFTsOrListedNFTs("fetchMyNFTs").then(setMyNFTs);
+  }, [fetchMyNFTsOrListedNFTs]);
 
   useEffect(() => {
-    fetchMyNFTsOrListedNFTs("fetchMyNFTs").then((items) => {
-      setMyNFTs(items);
-      console.log(myNFTs);
-    });
-  }, []);
+    const fetchProfileData = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:5000/api/users/${currentAccount}`
+        );
+        setProfileData(response.data.user);
+      } catch (error) {
+        console.error("Error fetching profile data:", error);
+      }
+    };
+    if (currentAccount) fetchProfileData();
+  }, [currentAccount]);
+
+  const fetchFollowers = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:5000/api/users/${profileData._id}/followers`
+      );
+      const standardizedFollowers = response.data.map((follower) => ({
+        ...follower,
+        seller: follower._id,
+        user: follower.username || "Unnamed User",
+      }));
+      setFollowerProfiles(standardizedFollowers);
+      setFollowingProfiles([]); // Clear other list when switching tabs
+    } catch (error) {
+      console.error("Error fetching followers:", error);
+    }
+  };
+
+  const fetchFollowing = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:5000/api/users/${profileData._id}/following`
+      );
+      const standardizedFollowing = response.data.map((following) => ({
+        ...following,
+        seller: following._id,
+        user: following.username || "Unnamed User",
+      }));
+      setFollowingProfiles(standardizedFollowing);
+      setFollowerProfiles([]);
+    } catch (error) {
+      console.error("Error fetching following:", error);
+    }
+  };
+
+  const handleTabClick = (tab) => {
+    setActiveTab(tab);
+    if (tab === "Followers") fetchFollowers();
+    else if (tab === "Following") fetchFollowing();
+  };
 
   return (
     <div className={Style.author}>
-      <Banner bannerImage={images.creatorbackground2} />
-      <AuthorProfileCard currentAccount={currentAccount} />
-      <AuthorTaps
-        setCollectiables={setCollectiables}
-        setCreated={setCreated}
-        setLike={setLike}
-        setFollower={setFollower}
-        setFollowing={setFollowing}
-        currentAccount={currentAccount}
+      <Banner
+        bannerImage={profileData?.background || "/default-background.jpg"}
       />
 
-      <AuthorNFTCardBox
-        collectiables={collectiables}
-        created={created}
-        like={like}
-        follower={follower}
-        following={following}
-        nfts={nfts}
-        myNFTS={myNFTs}
-      />
+      {profileData && (
+        <AuthorProfileCard
+          currentAccount={currentAccount}
+          profileImage={profileData.profileImage}
+          username={profileData.username}
+          description={profileData.description}
+          socialLinks={profileData.socialLinks}
+        />
+      )}
+
+      <AuthorTaps activeTab={activeTab} onTabClick={handleTabClick} />
+
+      {["Listed NFTs", "Own NFT", "Liked"].includes(activeTab) && (
+        <AuthorNFTCardBox
+          collectiables={activeTab === "Listed NFTs"}
+          created={activeTab === "Own NFT"}
+          like={activeTab === "Liked"}
+          follower={false}
+          following={false}
+          nfts={nfts}
+          myNFTS={myNFTs}
+        />
+      )}
+
       <Title
         heading="Popular Creators"
-        paragraph="Click on music icon and enjoy NTF music or audio
-"
+        paragraph="Click on music icon and enjoy NFT music or audio"
       />
+
       <div className={Style.author_box}>
-        {followerArray.map((el, i) => (
-          <FollowerTabCard i={i} el={el} />
+        {(activeTab === "Followers"
+          ? followerProfiles
+          : activeTab === "Following"
+          ? followingProfiles
+          : []
+        ).map((profile, i) => (
+          <FollowerTabCard
+            key={profile._id || i}
+            i={i}
+            el={profile}
+            relationType={activeTab === "Followers" ? "follower" : "following"}
+            onFollowStatusChange={handleTabClick} 
+          />
         ))}
       </div>
 
@@ -116,4 +138,4 @@ const author = () => {
   );
 };
 
-export default author;
+export default Author;
