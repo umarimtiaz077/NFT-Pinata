@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { TiArrowSortedDown, TiArrowSortedUp, TiTick } from "react-icons/ti";
 import Style from "./AuthorTaps.module.css";
 
-const AuthorTaps = ({ activeTab, onTabClick }) => {
+const UserTaps = ({ activeTab, onTabClick }) => {
   const [openList, setOpenList] = useState(false);
   const [selectedMenu, setSelectedMenu] = useState("Most Recent");
 
@@ -20,7 +20,7 @@ const AuthorTaps = ({ activeTab, onTabClick }) => {
       <div className={Style.AuthorTaps_box}>
         <div className={Style.AuthorTaps_box_left}>
           <div className={Style.AuthorTaps_box_left_btn}>
-            {["Listed NFTs", "Own NFT", "Liked", "Following", "Followers"].map((tab, index) => (
+            {["Created NFT",  "Liked", "Following", "Followers"].map((tab, index) => (
               <button
                 key={index}
                 className={`${activeTab === tab ? Style.active : ""}`}
@@ -58,4 +58,4 @@ const AuthorTaps = ({ activeTab, onTabClick }) => {
   );
 };
 
-export default AuthorTaps;
+export default UserTaps;
