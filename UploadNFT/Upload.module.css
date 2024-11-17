@@ -1,5 +1,24 @@
 
 
+
+.upload_box_row {
+    display: flex;
+    gap: 20px; /* Space between columns */
+  }
+  
+  .upload_box_row > .Form_box_input {
+    flex: 1; /* Each input will take half the available width */
+  }
+  
+
+  /* Media Query for Responsive Design */
+  @media (max-width: 768px) {
+    .upload_box_row {
+      flex-direction: column;
+      gap: 10px; /* Adjust spacing for smaller screens */
+    }
+  }
+  
 .upload_box_input_para{
    padding: 0 1rem;
 }
