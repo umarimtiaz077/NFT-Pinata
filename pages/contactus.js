@@ -64,20 +64,19 @@ const ContactUs = () => {
             <div className={Style.contactus_box_box_left_item}>
               <h3>🗺 ADDRESS</h3>
               <p>
-                Photo booth tattooed prism, portland taiyaki hoodie neutra
-                typewriter
+                Islamabad, Pakistan
               </p>
             </div>
             <div className={Style.contactus_box_box_left_item}>
               <h3>💌 EMAIL</h3>
-              <p>nc.example@example.com</p>
+              <p>mediamints6@gmail.com</p>
             </div>
             <div className={Style.contactus_box_box_left_item}>
               <h3>☎ PHONE</h3>
-              <p>000-123-456-7890</p>
+              <p>0325-865-3211</p>
             </div>
             <div className={Style.contactus_box_box_left_item}>
-              <h3>🌏 SOCIALS</h3>
+              {/* <h3>🌏 SOCIALS</h3>
               <a href="#">
                 <TiSocialFacebook />
               </a>
@@ -92,7 +91,7 @@ const ContactUs = () => {
               </a>
               <a href="#">
                 <TiSocialTwitter />
-              </a>
+              </a> */}
             </div>
           </div>
 

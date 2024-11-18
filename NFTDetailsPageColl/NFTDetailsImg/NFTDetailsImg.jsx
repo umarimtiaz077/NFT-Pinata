@@ -42,19 +42,19 @@ const NFTDetailsImg = ({ nft }) => {
 
   useEffect(() => {
     getNFTCount(); // Fetch data when the component mounts or `nft.image` changes
-  }, [nft.image]);
+  }, [nft.imageUrl]);
 
   // Toggle like/unlike functionality
   const likeNFT = () => {
     if (!like) {
-      likedNFT(nft.image)
+      likedNFT(nft.imageUrl)
         .then(() => {
           setLike(true);
           setCountnft((prevCount) => prevCount + 1); // Increment count when liked
         })
         .catch((error) => console.error("Error liking NFT:", error));
     } else {
-      unlikedNFT(nft.image)
+      unlikedNFT(nft.imageUrl)
         .then(() => {
           setLike(false);
           setCountnft((prevCount) => prevCount - 1); // Decrement count when unliked
@@ -84,7 +84,7 @@ const NFTDetailsImg = ({ nft }) => {
 
           <div className={Style.NFTDetailsImg_box_NFT_img}>
             <img
-              src={nft.image}
+              src={nft.imageUrl}
               className={Style.NFTDetailsImg_box_NFT_img_img}
               alt="NFT image"
               objectFit="cover"

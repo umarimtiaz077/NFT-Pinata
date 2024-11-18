@@ -71,7 +71,7 @@ const NFTCard = ({ isslice, NFTData }) => {
               <div className={Style.NFTCard_box_update_details_price}>
                 <div className={Style.NFTCard_box_update_details_price_box}>
                   <h4>
-                    {el.name} #{el.tokenId}
+                    {el.name} 
                   </h4>
 
                   <div
@@ -88,7 +88,7 @@ const NFTCard = ({ isslice, NFTData }) => {
                         Style.NFTCard_box_update_details_price_box_stock
                       }
                     >
-                      <small>61 in stock</small>
+                      {/* <small>61 in stock</small> */}
                     </div>
                   </div>
                 </div>

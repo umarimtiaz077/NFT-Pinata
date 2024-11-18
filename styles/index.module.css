@@ -42,3 +42,7 @@
     font-size: 1.3rem;
   }
   
+  .author-spacing {
+    margin: 20px 0;  /* Adds space above and below the component */
+  }
+  

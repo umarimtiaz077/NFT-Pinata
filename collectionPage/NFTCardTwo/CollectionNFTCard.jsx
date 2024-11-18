@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useEffect, useState } from "react";
 import Image from "next/image";
 import { BsImage } from "react-icons/bs";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
@@ -12,7 +12,7 @@ import { LikeProfile } from "../../components/componentsindex";
 const CollectionNFTCard = ({ NFTData }) => {
   const [like, setLike] = useState(false);
   const [likeInc, setLikeInc] = useState(21);
-
+  const [imageData, setImageData] = useState(null);
   const likeNFT = () => {
     if (!like) {
       setLike(true);
@@ -24,6 +24,26 @@ const CollectionNFTCard = ({ NFTData }) => {
   };
 
   // console.log(NFTData);
+  useEffect(() => {
+    // Function to fetch the data from the imageUrl
+    const fetchImageData = async () => {
+      if (NFTData && NFTData[0]?.imageUrl) {
+        try {
+          const response = await fetch(NFTData[0].imageUrl); // Make GET request
+          if (!response.ok) {
+            throw new Error("Failed to fetch image data");
+          }
+          const data = await response.text(); // Assuming the response is text (can be JSON or other format)
+          setImageData(data); // Save the response data to state
+          console.log(data,"kkmj");
+        } catch (error) {
+          console.error("Error fetching image data:", error);
+        }
+      }
+    };
+
+    fetchImageData();
+  }, [NFTData]);
 
   return (
     <div className={Style.NFTCardTwo}>
@@ -44,6 +64,7 @@ const CollectionNFTCard = ({ NFTData }) => {
             </div>
 
             <div className={Style.NFTCardTwo_box_img}>
+              {console.log(el.imageUrl.image)}
               <img
                 src={el.imageUrl}
                 alt="NFT"
@@ -54,10 +75,10 @@ const CollectionNFTCard = ({ NFTData }) => {
 
             <div className={Style.NFTCardTwo_box_info}>
               <div className={Style.NFTCardTwo_box_info_left}>
-                <LikeProfile />
+                {/* <LikeProfile /> */}
                 <p>{el.itemName}</p>
               </div>
-              <small>4{i + 2}</small>
+              {/* <small>4{i + 2}</small> */}
             </div>
 
             <div className={Style.NFTCardTwo_box_price}>

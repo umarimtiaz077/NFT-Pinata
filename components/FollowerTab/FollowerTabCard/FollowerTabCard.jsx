@@ -98,7 +98,7 @@ const FollowerTabCard = ({ i, el, initialFollowing = [], onFollowStatusChange, r
         <div className={Style.FollowerTabCard_box_info}>
           <div className={Style.FollowerTabCard_box_info_name}>
             <h4>{el.user || "Unnamed User"}</h4>
-            <p>{el.total || 0} ETH</p>
+            {/* <p>{el.total || 0} ETH</p> */}
           </div>
 
           {/* Follow/Unfollow Button */}

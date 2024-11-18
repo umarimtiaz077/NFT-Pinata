@@ -3,6 +3,8 @@
 .title{
     width: 100%;
 }
+ 
+   
 
 .title_box{
     width: 80%;
@@ -12,6 +14,9 @@
 .title_box h2{
     font-size: 3rem;
     line-height: 0;
+    display:flex;
+    justify-content: center;
+    align-items: center;
 }
 
 @media screen and (min-device-width: 320px) and (max-device-width: 425px) {

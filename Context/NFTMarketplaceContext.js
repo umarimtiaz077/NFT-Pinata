@@ -158,37 +158,70 @@ export const NFTMarketplaceProvider = ({ children }) => {
     setOpenError(true);
   };
 
-  //---CREATENFT FUNCTION
-  const createNFT = async (name, price, image, description, router, website, royalties, fileSize, category,category_id, properties, userAddress ) => {
-    if (!name || !description || !price || !image)
-      return setError("Data Is Missing"), setOpenError(true);
+ //---CREATENFT FUNCTION
+const createNFT = async (name, price, image, description, router, website, royalties, fileSize, category, category_id, properties, userAddress) => {
+  if (!name || !description || !price || !image)
+    return setError("Data Is Missing"), setOpenError(true);
 
-    const data = JSON.stringify({ name, description, image });
+  const data = JSON.stringify({ name, description, image });
 
-    try {
-      const response = await axios({
-        method: "POST",
-        url: "https://api.pinata.cloud/pinning/pinJSONToIPFS",
-        data: data,
-        headers: {
-          pinata_api_key:  `717ecefadeb60ceac995`, 
-          pinata_secret_api_key: `34e3c927ed9a2462e46ec299d941af9ac62d6b2273f7f0fe36c082f289fef2d1`, 
+  try {
+    // Upload JSON to Pinata
+    const response = await axios({
+      method: "POST",
+      url: "https://api.pinata.cloud/pinning/pinJSONToIPFS",
+      data: data,
+      headers: {
+        pinata_api_key: `717ecefadeb60ceac995`,
+        pinata_secret_api_key: `34e3c927ed9a2462e46ec299d941af9ac62d6b2273f7f0fe36c082f289fef2d1`,
         "Content-Type": "application/json",
-        },
-      });
+      },
+    });
 
-      const url = `https://gateway.pinata.cloud/ipfs/${response.data.IpfsHash}`;
-      console.log(url);
+    const metadataURL = `https://gateway.pinata.cloud/ipfs/${response.data.IpfsHash}`;
+    console.log("Metadata URL:", metadataURL);
 
-      await createSale(url, price);
-      console.log(name, price, image, description, router, website, royalties, fileSize, category,category_id, properties, userAddress, 'checking')
-      storeNFTinbackend( name, website, description, royalties, fileSize, category,category_id, properties, price, userAddress, url);
-      router.push("/searchPage");
-    } catch (error) {
-      setError("Error while creating NFT");
-      setOpenError(true);
-    }
-  };
+    // Create sale and store NFT in the backend
+    await createSale(metadataURL, price);
+    console.log(
+      name,
+      price,
+      image,
+      description,
+      router,
+      website,
+      royalties,
+      fileSize,
+      category,
+      category_id,
+      properties,
+      userAddress,
+      "Data to be stored in backend"
+    );
+
+    // Ensure the correct `image` field is included in backend payload
+    storeNFTinbackend(
+      name,
+      website,
+      description,
+      royalties,
+      fileSize,
+      category,
+      category_id,
+      properties,
+      price,
+      userAddress,
+      image // Pass the correct image URL here
+    );
+
+    router.push("/searchPage");
+  } catch (error) {
+    setError("Error while creating NFT");
+    setOpenError(true);
+    console.error(error);
+  }
+};
+
 
   //--- createSale FUNCTION
   const createSale = async (url, formInputPrice, isReselling, id) => {

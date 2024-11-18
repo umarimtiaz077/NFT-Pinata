@@ -18,8 +18,8 @@ const Brand = () => {
           <a href="/">
             <DiJqueryLogo className={Style.Brand_box_left_logo} />
           </a>
-          <h1>Earn free crypto with Ciscrypt</h1>
-          <p>A creative agency that lead and inspire.</p>
+          <h1>Buy and Sell NFTS</h1>
+          <p>A dynamic marketplace that empowers creators.</p>
 
           <div className={Style.Brand_box_left_btn}>
             <Button

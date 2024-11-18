@@ -23,11 +23,11 @@ const CollectionProfile = ({ collection }) => {
           <h1>{collection.name || "Unnamed Collection"}</h1>
           <p>{collection.description || "No description provided."}</p>
           <div className={Style.collectionProfile_box_social}>
-            {/* Social Media Icons */}
+            {/* Social Media Icons
             <TiSocialFacebook />
             <TiSocialTwitter />
             <TiSocialLinkedin />
-            <TiSocialInstagram />
+            <TiSocialInstagram /> */}
           </div>
         </div>
       </div>

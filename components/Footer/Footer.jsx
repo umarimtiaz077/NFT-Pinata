@@ -27,12 +27,11 @@ const Footer = () => {
             <DiJqueryLogo className={Style.footer_box_social_logo} />
           </a>
           <p>
-            The world’s first and largest digital marketplace for crypto
-            collectibles and non-fungible tokens (NFTs). Buy, sell, and discover
+            The world’s first and largest digital marketplace for non-fungible tokens (NFTs). Buy, sell, and discover
             exclusive digital items.
           </p>
 
-          <div className={Style.footer_social}>
+          {/* <div className={Style.footer_social}>
             <a href="#">
               <TiSocialFacebook />
             </a>
@@ -48,7 +47,7 @@ const Footer = () => {
             <a href="#">
               <TiSocialInstagram />
             </a>
-          </div>
+          </div> */}
         </div>
 
         <div className={Style.footer_box_discover}>
@@ -62,15 +61,15 @@ const Footer = () => {
         </div>
 
         <div className={Style.subscribe}>
-          <h3>Subscribe</h3>
+          <h3>MediaMints</h3>
 
           <div className={Style.subscribe_box}>
-            <input type="email" placeholder="Enter your email *" />
-            <RiSendPlaneFill className={Style.subscribe_box_send} />
+            <input type="email" placeholder="" />
+            {/* <RiSendPlaneFill className={Style.subscribe_box_send} /> */}
           </div>
           <div className={Style.subscribe_box_info}>
             <p>
-              Discover, collect, and sell extraordinary NFTs OpenSea is the
+              Discover, sell, and buy extraordinary NFTs MediaMints is the
               world first and largest NFT marketplace
             </p>
           </div>

@@ -103,7 +103,7 @@ const FollowerTabCardTwo = ({
                 <MdVerified />
               </span> */}
             </h4>
-            <p>{el?.total || 0} ETH</p>
+            
           </div>
 
           {/* Follow/Unfollow Button */}

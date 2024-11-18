@@ -24,6 +24,7 @@ import { getTopCreators } from "../TopCreators/TopCreators";
 // IMPORTING CONTRACT DATA
 import { NFTMarketplaceContext } from "../Context/NFTMarketplaceContext";
 import FollowerTabCard from "../components/FollowerTab/FollowerTabCard/FollowerTabCard";
+import Authors from "./authors";
 
 const Home = () => {
   const { checkIfWalletConnected, currentAccount } = useContext(
@@ -58,14 +59,23 @@ const Home = () => {
       <Service />
       {/* <BigNFTSilder /> */}
 
-      {creators.length === 0 ? (
-        <Loader />
-      ) : (
-        <FollowerTab TopCreator={creators} />
-      )}
+     
+      <Authors slices={4} showBrand={false} className="author-spacing"/> 
+      <div><div className={Style.followerTab_member}>
+        
+      </div><div className={Style.followerTab_member_box }>
+          {/* <a href="authors">Show me more</a> */}
+        </div></div>
+        
+      <div className={Style.followerTab_member}>
+        <div className={Style.followerTab_member_box }>
+          <a href="authors">Show me more</a>
+        </div>
+      </div>
+  
       <Collection  slices={3}/>
       <div className={Style.followerTab_member}>
-        <div className={Style.followerTab_member_box}>
+        <div className={Style.followerTab_member_box }>
           <a href="collectionsPage">Show me more</a>
         </div>
       </div>
@@ -82,7 +92,7 @@ const Home = () => {
         </div>
       </div>
 
-      <Subscribe />
+      <Brand />
     </div>
   );
 };

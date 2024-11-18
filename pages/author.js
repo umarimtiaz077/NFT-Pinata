@@ -94,9 +94,9 @@ const Author = () => {
 
   return (
     <div className={Style.author}>
-      <Banner
+      {/* <Banner
         bannerImage={profileData?.background || "/default-background.jpg"}
-      />
+      /> */}
 
       {profileData && (
         <AuthorProfileCard
@@ -127,11 +127,11 @@ const Author = () => {
       {activeTab === "Liked" && (
         <LikeNFTCard wallet_address={wallet_address} NFTData={nfts} />
       )}
-
+{/* 
       <Title
         heading="Popular Creators"
         paragraph="Click on music icon and enjoy NFT music or audio"
-      />
+      /> */}
 
       <div className={Style.author_box}>
         {/* {(activeTab === "Followers"

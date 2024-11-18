@@ -10,7 +10,7 @@ const ProfilePage = () => {
   const router = useRouter();
 
   const accessToken =
-    "IGQWRNVEMtZAnlLVE1hTnlFTmRNdzFlSzFuSHBpeEU2Tjg3MkkwanZAPUjhHUzY3UU1LTkNGNThCVTRKZAjFIWTk1ZAndsd0JMMFdPQ1lnZAjU1dEFNRkxQallrWnZANR3BQWkd3VFpGckc0Q080Q2xsUmI4V3ZAXSXMzbHMZD";
+    "IGQWRNXzdlZAjFxaTBHTHVUSEN4VG4wRHFadTVuZA3JVcTdmSVZAVaHBiaG8wRS1GeTBWVnA2ZAmRNRkEwczRBRG43SXhsUmRXaEMyNWNXNnZAub1djeXB3WnZACZAGVNN0NXYXZAZAejd3SGdHTE5pR2laRFlrTEpLcElZATXMZD";
 
   const fetchUserProfile = async () => {
     const url = `https://graph.instagram.com/me?fields=id,username,media_count&access_token=${accessToken}`;

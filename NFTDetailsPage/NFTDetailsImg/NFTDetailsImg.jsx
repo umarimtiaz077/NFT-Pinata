@@ -88,6 +88,8 @@ const NFTDetailsImg = ({ nft }) => {
               className={Style.NFTDetailsImg_box_NFT_img_img}
               alt="NFT image"
               objectFit="cover"
+              width={600}
+              height={600}
             />
           </div>
         </div>
@@ -113,7 +115,7 @@ const NFTDetailsImg = ({ nft }) => {
 
         {details && (
           <div className={Style.NFTDetailsImg_box_details_box}>
-            <small>2000 x 2000 px.IMAGE(685KB)</small>
+            <small>600 x 600 px.IMAGE</small>
             <p>
               <small>Contract Address</small>
               <br />

@@ -111,39 +111,21 @@ const NFTDescription = ({ nft }) => {
       <div className={Style.NFTDescription_box}>
         {/* //Part ONE */}
         <div className={Style.NFTDescription_box_share}>
-          <p>Virtual Worlds</p>
+          {/* <p>Virtual Worlds</p> */}
           <div className={Style.NFTDescription_box_share_box}>
-            <MdCloudUpload
+            {/* <MdCloudUpload
               className={Style.NFTDescription_box_share_box_icon}
               onClick={() => openSocial()}
-            />
+            /> */}
 
-            {social && (
-              <div className={Style.NFTDescription_box_share_box_social}>
-                <a href="#">
-                  <TiSocialFacebook /> Facebooke
-                </a>
-                <a href="#">
-                  <TiSocialInstagram /> Instragram
-                </a>
-                <a href="#">
-                  <TiSocialLinkedin /> LinkedIn
-                </a>
-                <a href="#">
-                  <TiSocialTwitter /> Twitter
-                </a>
-                <a href="#">
-                  <TiSocialYoutube /> YouTube
-                </a>
-              </div>
-            )}
+           
 
-            <BsThreeDots
+            {/* <BsThreeDots
               className={Style.NFTDescription_box_share_box_icon}
               onClick={() => openNFTMenu()}
-            />
+            /> */}
 
-            {NFTMenu && (
+            {/* {NFTMenu && (
               <div className={Style.NFTDescription_box_share_box_social}>
                 <a href="#">
                   <BiDollar /> Change price
@@ -158,50 +140,27 @@ const NFTDescription = ({ nft }) => {
                   <MdOutlineDeleteSweep /> Delete item
                 </a>
               </div>
-            )}
+            )} */}
           </div>
         </div>
         {/* //Part TWO */}
         <div className={Style.NFTDescription_box_profile}>
           <h1>
-            {nft.itemName} #{nft.tokenId}
+            {nft.itemName} 
           </h1>
           <div className={Style.NFTDescription_box_profile_box}>
             <div className={Style.NFTDescription_box_profile_box_left}>
-              <Image
+              {/* <Image
                 src={images.user1}
                 alt="profile"
                 width={40}
                 height={40}
                 className={Style.NFTDescription_box_profile_box_left_img}
-              />
-              <div className={Style.NFTDescription_box_profile_box_left_info}>
-                <small>Creator</small> <br />
-                {/* <Link href={{ pathname: "/author", query: `${nft.seller}` }}> */}
-                <Link href={{ pathname: "/author" }}>
-                  <span>
-                    Karli Costa <MdVerified />
-                  </span>
-                </Link>
-              </div>
+              /> */}
+              
             </div>
 
-            <div className={Style.NFTDescription_box_profile_box_right}>
-              <Image
-                src={images.creatorbackground1}
-                alt="profile"
-                width={40}
-                height={40}
-                className={Style.NFTDescription_box_profile_box_left_img}
-              />
-
-              <div className={Style.NFTDescription_box_profile_box_right_info}>
-                <small>Collection</small> <br />
-                <span>
-                  Mokeny app <MdVerified />
-                </span>
-              </div>
-            </div>
+            
           </div>
 
           <div className={Style.NFTDescription_box_profile_biding}>
@@ -252,11 +211,11 @@ const NFTDescription = ({ nft }) => {
               >
                 <small>Current Bid</small>
                 <p>
-                  {nft.price} ETH <span>( ≈ $3,221.22)</span>
+                  {nft.price} .0 ETH <span>( ≈ $3,221.22)</span>
                 </p>
               </div>
 
-              <span>[96 in stock]</span>
+             
             </div>
 
             <div className={Style.NFTDescription_box_profile_biding_box_button}>
@@ -290,28 +249,7 @@ const NFTDescription = ({ nft }) => {
               />
             </div>
 
-            <div className={Style.NFTDescription_box_profile_biding_box_tabs}>
-              <button onClick={(e) => openTabs(e)}>Bid History</button>
-              <button onClick={(e) => openTabs(e)}>Provanance</button>
-              <button onClick={() => openOwmer()}>Owner</button>
-            </div>
-
-            {history && (
-              <div className={Style.NFTDescription_box_profile_biding_box_card}>
-                <NFTTabs dataTab={historyArray} />
-              </div>
-            )}
-            {provanance && (
-              <div className={Style.NFTDescription_box_profile_biding_box_card}>
-                <NFTTabs dataTab={provananceArray} />
-              </div>
-            )}
-
-            {owner && (
-              <div className={Style.NFTDescription_box_profile_biding_box_card}>
-                <NFTTabs dataTab={ownerArray} icon={<MdVerified />} />
-              </div>
-            )}
+            
           </div>
         </div>
       </div>

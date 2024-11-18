@@ -32,7 +32,7 @@ const AuthorTaps = ({ activeTab, onTabClick }) => {
           </div>
         </div>
 
-        <div className={Style.AuthorTaps_box_right}>
+        {/* <div className={Style.AuthorTaps_box_right}>
           <div className={Style.AuthorTaps_box_right_para} onClick={openDropDownList}>
             <p>{selectedMenu}</p>
             {openList ? <TiArrowSortedUp /> : <TiArrowSortedDown />}
@@ -52,7 +52,7 @@ const AuthorTaps = ({ activeTab, onTabClick }) => {
               ))}
             </div>
           )}
-        </div>
+        </div> */}
       </div>
     </div>
   );

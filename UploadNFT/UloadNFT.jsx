@@ -2,6 +2,8 @@ import React, { useState, useEffect, useContext } from "react";
 import { MdOutlineHttp, MdOutlineAttachFile } from "react-icons/md";
 import { FaPercent } from "react-icons/fa";
 import { AiTwotonePropertySafety } from "react-icons/ai";
+import { TiTick } from "react-icons/ti";
+import Image from "next/image";
 import { useRouter } from "next/router";
 import axios from "axios";
 
@@ -13,27 +15,29 @@ import { DropZone } from "../UploadNFT/uploadNFTIndex.js";
 import { NFTMarketplaceContext } from "../Context/NFTMarketplaceContext";
 
 const UploadNFT = ({ uploadToIPFS, createNFT, uploadToPinata }) => {
-  const { userId } = useContext(NFTMarketplaceContext); // Get userId from context
-  const [userCollections, setUserCollections] = useState([]); // State for fetched collections
+  const { userId, walletAddress } = useContext(NFTMarketplaceContext); // Get userId from context
+  const [categoryArry, setUserCollections] = useState([]); // State for fetched collections
   const [price, setPrice] = useState("");
+  const [active, setActive] = useState(0);
   const [name, setName] = useState("");
   const [website, setWebsite] = useState("");
   const [description, setDescription] = useState("");
   const [royalties, setRoyalties] = useState("");
   const [fileSize, setFileSize] = useState("");
   const [category, setCategory] = useState("");
+  const [category_id, setCategoryId] = useState("");
   const [properties, setProperties] = useState("");
-  const [image, setImage] = useState(null); // Uploaded image file
-  const [defaultImage, setDefaultImage] = useState(null); // Default image (from query)
+  const [image, setImage] = useState(null);
 
   const router = useRouter();
-  const { mediaUrl } = router.query; // Retrieve mediaUrl from query parameters
 
   useEffect(() => {
     // Fetch user collections on component mount
     const fetchUserCollections = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/api/collection/user/${userId}`);
+        const response = await axios.get(
+          `http://localhost:5000/api/collection/user/${userId}`
+        );
         setUserCollections(response.data.collections); // Populate user collections
       } catch (error) {
         console.error("Error fetching user collections:", error);
@@ -43,34 +47,22 @@ const UploadNFT = ({ uploadToIPFS, createNFT, uploadToPinata }) => {
     if (userId) fetchUserCollections();
   }, [userId]);
 
-  useEffect(() => {
-    // Set the default image if mediaUrl is provided
-    if (mediaUrl) {
-      setDefaultImage(mediaUrl);
-      setImage(mediaUrl); // Set the default image as the initial image
-    }
-  }, [mediaUrl]);
-
   const handleUpload = async () => {
     try {
-      let imageToUpload = image;
-
-      if (!imageToUpload) {
-        alert("Please upload or select an image.");
+      // Step 1: Upload the image to IPFS/Pinata
+      if (!image) {
+        setError("Image file is missing.");
+        setOpenError(true);
         return;
       }
 
       console.log("Uploading image to IPFS/Pinata...");
-      const imageUrl =
-        typeof imageToUpload === "string" // Check if it's a URL (defaultImage)
-          ? imageToUpload
-          : await uploadToPinata(imageToUpload); // Upload file if it's a File object
-
+      const imageUrl = await uploadToPinata(image); // Upload the image file
       console.log("Image URL:", imageUrl);
 
-      // Create NFT with the uploaded image URL
+      // Step 2: Create NFT with the returned image URL
       if (imageUrl) {
-        await createNFT(name, price, imageUrl, description, router);
+        await createNFT(name, price, imageUrl, description, router, website, royalties, fileSize, category,category_id, properties, walletAddress); // Pass the URL
       }
     } catch (error) {
       console.error("Error in handleUpload:", error);
@@ -79,7 +71,6 @@ const UploadNFT = ({ uploadToIPFS, createNFT, uploadToPinata }) => {
 
   return (
     <div className={Style.upload}>
-      {/* DropZone Section */}
       <DropZone
         title="JPG, PNG, WEBM, MAX 100MB"
         heading="Drag & drop file"
@@ -94,10 +85,8 @@ const UploadNFT = ({ uploadToIPFS, createNFT, uploadToPinata }) => {
         setImage={setImage}
         uploadToIPFS={uploadToIPFS}
         uploadToPinata={uploadToPinata}
-        defaultImage={defaultImage} // Pass the defaultImage for DropZone preview
       />
 
-      {/* Form Section */}
       <div className={Style.upload_box}>
         {/* Row 1: Item Name and Website */}
         <div className={Style.upload_box_row}>
@@ -110,6 +99,7 @@ const UploadNFT = ({ uploadToIPFS, createNFT, uploadToPinata }) => {
               onChange={(e) => setName(e.target.value)}
             />
           </div>
+
           <div className={formStyle.Form_box_input}>
             <label htmlFor="website">Website</label>
             <div className={formStyle.Form_box_input_box}>
@@ -125,7 +115,7 @@ const UploadNFT = ({ uploadToIPFS, createNFT, uploadToPinata }) => {
           </div>
         </div>
 
-        {/* Description Field */}
+        {/* Description Field (Full Width) */}
         <div className={formStyle.Form_box_input}>
           <label htmlFor="description">Description</label>
           <textarea
@@ -134,81 +124,112 @@ const UploadNFT = ({ uploadToIPFS, createNFT, uploadToPinata }) => {
             placeholder="Description"
             onChange={(e) => setDescription(e.target.value)}
           ></textarea>
+          <p>The description will be included on the item's detail page.</p>
         </div>
 
-        {/* Row 2: Royalties and File Size */}
-        <div className={Style.upload_box_row}>
-          <div className={formStyle.Form_box_input}>
-            <label htmlFor="royalties">Royalties</label>
-            <div className={formStyle.Form_box_input_box}>
-              <div className={formStyle.Form_box_input_box_icon}>
-                <FaPercent />
+        <div className={Style.upload_box_slider_div}>
+          {categoryArry.map((el, i) => (
+            <div
+              className={`${Style.upload_box_slider} ${
+                active == i + 1 ? Style.active : ""
+              }`}
+              key={i + 1}
+              onClick={() => (setActive(i + 1), setCategory(el.name), setCategoryId(el._id))}
+            >
+              <div className={Style.upload_box_slider_box}>
+                <div className={Style.upload_box_slider_box_img}>
+                  <Image
+                    src={el.image}
+                    alt="background image"
+                    width={70}
+                    height={70}
+                    className={Style.upload_box_slider_box_img_img}
+                  />
+                </div>
+                <div className={Style.upload_box_slider_box_img_icon}>
+                  <TiTick />
+                </div>
               </div>
-              <input
-                type="text"
-                placeholder="20%"
-                onChange={(e) => setRoyalties(e.target.value)}
-              />
+              <p>{el.name} </p>
             </div>
-          </div>
-          <div className={formStyle.Form_box_input}>
-            <label htmlFor="fileSize">File Size</label>
-            <div className={formStyle.Form_box_input_box}>
-              <div className={formStyle.Form_box_input_box_icon}>
-                <MdOutlineAttachFile />
-              </div>
-              <input
-                type="text"
-                placeholder="File size in MB"
-                onChange={(e) => setFileSize(e.target.value)}
-              />
-            </div>
-          </div>
+          ))}
         </div>
+      </div>
 
-        {/* Row 3: Properties and Price */}
-        <div className={Style.upload_box_row}>
-          <div className={formStyle.Form_box_input}>
-            <label htmlFor="properties">Properties</label>
-            <div className={formStyle.Form_box_input_box}>
-              <div className={formStyle.Form_box_input_box_icon}>
-                <AiTwotonePropertySafety />
-              </div>
-              <input
-                type="text"
-                placeholder="Properties"
-                onChange={(e) => setProperties(e.target.value)}
-              />
+      {/* Row 2: Royalties and File Size */}
+      <div className={Style.upload_box_row}>
+        <div className={formStyle.Form_box_input}>
+          <label htmlFor="royalties">Royalties</label>
+          <div className={formStyle.Form_box_input_box}>
+            <div className={formStyle.Form_box_input_box_icon}>
+              <FaPercent />
             </div>
-          </div>
-          <div className={formStyle.Form_box_input}>
-            <label htmlFor="price">Price</label>
-            <div className={formStyle.Form_box_input_box}>
-              <div className={formStyle.Form_box_input_box_icon}>
-                <AiTwotonePropertySafety />
-              </div>
-              <input
-                type="text"
-                placeholder="Price in ETH"
-                onChange={(e) => setPrice(e.target.value)}
-              />
-            </div>
+            <input
+              type="text"
+              placeholder="20%"
+              onChange={(e) => setRoyalties(e.target.value)}
+            />
           </div>
         </div>
 
-        {/* Action Buttons */}
-        <div className={Style.upload_box_btn}>
-          <Button
-            btnName="Upload"
-            handleClick={handleUpload}
-            classStyle={Style.upload_box_btn_style}
-          />
-          <Button
-            btnName="Preview"
-            handleClick={() => {}}
-            classStyle={Style.upload_box_btn_style}
-          />
+        <div className={formStyle.Form_box_input}>
+          <label htmlFor="fileSize">File Size</label>
+          <div className={formStyle.Form_box_input_box}>
+            <div className={formStyle.Form_box_input_box_icon}>
+              <MdOutlineAttachFile />
+            </div>
+            <input
+              type="text"
+              placeholder="File size in MB"
+              onChange={(e) => setFileSize(e.target.value)}
+            />
+          </div>
         </div>
+      </div>
+
+      {/* Row 3: Properties and Price */}
+      <div className={Style.upload_box_row}>
+        <div className={formStyle.Form_box_input}>
+          <label htmlFor="properties">Properties</label>
+          <div className={formStyle.Form_box_input_box}>
+            <div className={formStyle.Form_box_input_box_icon}>
+              <AiTwotonePropertySafety />
+            </div>
+            <input
+              type="text"
+              placeholder="Properties"
+              onChange={(e) => setProperties(e.target.value)}
+            />
+          </div>
+        </div>
+
+        <div className={formStyle.Form_box_input}>
+          <label htmlFor="price">Price</label>
+          <div className={formStyle.Form_box_input_box}>
+            <div className={formStyle.Form_box_input_box_icon}>
+              <AiTwotonePropertySafety />
+            </div>
+            <input
+              type="text"
+              placeholder="Price in ETH"
+              onChange={(e) => setPrice(e.target.value)}
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* Action Buttons */}
+      <div className={Style.upload_box_btn}>
+        <Button
+          btnName="Upload"
+          handleClick={handleUpload} // Call handleUpload on click
+          classStyle={Style.upload_box_btn_style}
+        />
+        <Button
+          btnName="Preview"
+          handleClick={() => {}}
+          classStyle={Style.upload_box_btn_style}
+        />
       </div>
     </div>
   );
