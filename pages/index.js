@@ -23,6 +23,7 @@ import { getTopCreators } from "../TopCreators/TopCreators";
 
 // IMPORTING CONTRACT DATA
 import { NFTMarketplaceContext } from "../Context/NFTMarketplaceContext";
+import FollowerTabCard from "../components/FollowerTab/FollowerTabCard/FollowerTabCard";
 
 const Home = () => {
   const { checkIfWalletConnected, currentAccount } = useContext(
@@ -55,14 +56,13 @@ const Home = () => {
     <div className={Style.homePage}>
       <HeroSection />
       <Service />
-      <BigNFTSilder />
+      {/* <BigNFTSilder /> */}
 
       {creators.length === 0 ? (
         <Loader />
       ) : (
-        <FollowerTab isslice={3} TopCreator={creators} />
+        <FollowerTab TopCreator={creators} />
       )}
-
       <Collection  slices={3}/>
       <div className={Style.followerTab_member}>
         <div className={Style.followerTab_member_box}>

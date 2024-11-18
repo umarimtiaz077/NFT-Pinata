@@ -20,7 +20,7 @@ const UserTaps = ({ activeTab, onTabClick }) => {
       <div className={Style.AuthorTaps_box}>
         <div className={Style.AuthorTaps_box_left}>
           <div className={Style.AuthorTaps_box_left_btn}>
-            {["Created NFT",  "Liked", "Following", "Followers"].map((tab, index) => (
+            {["Created NFT",  "Following", "Followers"].map((tab, index) => (
               <button
                 key={index}
                 className={`${activeTab === tab ? Style.active : ""}`}

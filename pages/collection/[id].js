@@ -12,6 +12,7 @@ import {
 } from "../../collectionPage/collectionIndex";
 import { Slider, Brand } from "../../components/componentsindex";
 import { NFTMarketplaceContext } from "../../Context/NFTMarketplaceContext";
+import CollectionNFTCard from "../../collectionPage/NFTCardTwo/CollectionNFTCard";
 
 const Collection = () => {
   const [collectionData, setCollectionData] = useState(null); // State for collection data
@@ -97,7 +98,7 @@ const Collection = () => {
     <div className={Style.collection}>
       <Banner bannerImage={collectionData?.banner || images.creatorbackground1} />
       {collectionData && <CollectionProfile collection={collectionData} />}
-      <NFTCardTwo NFTData={NFTData.length > 0 ? NFTData : nfts} />
+      <CollectionNFTCard NFTData={NFTData.length > 0 ? NFTData : nfts} />
       <Brand />
     </div>
   );

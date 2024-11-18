@@ -84,9 +84,9 @@ const AuthorProfileCard = ({ currentAccount, profileImage, username, description
           </div>
         </div>
 
-        <div className={Style.AuthorProfileCard_box_share}>
+        {/* <div className={Style.AuthorProfileCard_box_share}>
           <Button btnName="Follow" handleClick={() => {handlecheck()}} />
-        </div>
+        </div> */}
       </div>
     </div>
   );

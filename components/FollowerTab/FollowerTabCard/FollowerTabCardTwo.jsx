@@ -1,54 +1,54 @@
 import React, { useState, useEffect, useContext } from "react";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { NFTMarketplaceContext } from "../../../Context/NFTMarketplaceContext";
+import { MdVerified } from "react-icons/md";
+import { TiTick } from "react-icons/ti";
 import Style from "./FollowerTabCard.module.css";
+import { NFTMarketplaceContext } from "../../../Context/NFTMarketplaceContext";
 
-const FollowerTabCard = ({ i, el, initialFollowing = [], onFollowStatusChange, relationType }) => {
-  const { followUser, unfollowUser, userId, getFollowersAndFollowing } = useContext(NFTMarketplaceContext);
+const FollowerTabCardTwo = ({
+  i,
+  el,
+  initialFollowing = [],
+  onFollowStatusChange,
+  relationType,
+}) => {
+  const { followUser, unfollowUser, userId } = useContext(NFTMarketplaceContext);
   const router = useRouter();
 
   // States
   const [following, setFollowing] = useState(false);
 
   // Derived Values
-  const isOwnProfile = el.seller === userId;
-  const background = el.background || el.profileImage || "/default-background.jpg";
-  const profileImage = el.profileImage || el.background || "/default-profile.jpg";
+  const isOwnProfile = el?.seller && userId && el.seller === userId;
+  const background = el?.background || el?.profileImage || "/default-background.jpg";
+  const profileImage = el?.profileImage || el?.background || "/default-profile.jpg";
 
   // Initialize `following` state
   useEffect(() => {
-    setFollowing(Array.isArray(initialFollowing) && initialFollowing.includes(el.seller));
-  }, [initialFollowing, el.seller]);
+    setFollowing(
+      Array.isArray(initialFollowing) && initialFollowing.includes(el?.seller)
+    );
+  }, [initialFollowing, el?.seller]);
 
   // Follow/Unfollow Handler
   const toggleFollow = async (e) => {
     e.stopPropagation(); // Prevents triggering the card click event
-
     try {
       let response;
       if (following) {
-        // If currently following, unfollow the user
         response = await unfollowUser(el.seller);
         if (response?.success) {
-          // Update local state for "unfollowed"
           setFollowing(false);
-          // Propagate the change to parent component
-          onFollowStatusChange?.("Unfollowed", el.seller);
+          onFollowStatusChange?.("Unfollowed");
         }
       } else {
-        // If not following, follow the user
         response = await followUser(el.seller);
         if (response?.success) {
-          // Update local state for "followed"
           setFollowing(true);
-          // Propagate the change to parent component
-          onFollowStatusChange?.("Followed", el.seller);
+          onFollowStatusChange?.("Followed");
         }
       }
-
-      // Update followers/following list in the context to reflect the changes
-      await getFollowersAndFollowing(userId); // Ensure context is updated
     } catch (error) {
       console.error("Error toggling follow status:", error);
     }
@@ -58,7 +58,7 @@ const FollowerTabCard = ({ i, el, initialFollowing = [], onFollowStatusChange, r
   const redirectToDetailPage = () => {
     router.push({
       pathname: "/detailUser",
-      query: { seller: el.seller },
+      query: { seller: el?.seller },
     });
   };
 
@@ -97,8 +97,13 @@ const FollowerTabCard = ({ i, el, initialFollowing = [], onFollowStatusChange, r
         {/* Info Section */}
         <div className={Style.FollowerTabCard_box_info}>
           <div className={Style.FollowerTabCard_box_info_name}>
-            <h4>{el.user || "Unnamed User"}</h4>
-            <p>{el.total || 0} ETH</p>
+            <h4>
+              {el?.username || "Unnamed User"}
+              {/* <span>
+                <MdVerified />
+              </span> */}
+            </h4>
+            <p>{el?.total || 0} ETH</p>
           </div>
 
           {/* Follow/Unfollow Button */}
@@ -111,6 +116,9 @@ const FollowerTabCard = ({ i, el, initialFollowing = [], onFollowStatusChange, r
               }}
             >
               {isOwnProfile ? "You" : following ? "Unfollow" : "Follow"}
+              {/* <span>
+                <TiTick />
+              </span> */}
             </a>
           </div>
         </div>
@@ -119,4 +127,4 @@ const FollowerTabCard = ({ i, el, initialFollowing = [], onFollowStatusChange, r
   );
 };
 
-export default FollowerTabCard;
+export default FollowerTabCardTwo;

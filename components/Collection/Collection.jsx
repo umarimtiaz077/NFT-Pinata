@@ -69,7 +69,7 @@ const Collection = ({ slices }) => {
       <div className={Style.collection_title}>
         <h2>Discover Collections</h2>
         <div className={Style.collection_collections}>
-          <div className={Style.collection_collections_btn}>
+          {/* <div className={Style.collection_collections_btn}>
             <button onClick={openPopular}>
               <BsFillAlarmFill /> 24 hours
             </button>
@@ -79,7 +79,7 @@ const Collection = ({ slices }) => {
             <button onClick={openNews}>
               <BsFillCalendarDateFill /> 30 days
             </button>
-          </div>
+          </div> */}
         </div>
       </div>
 

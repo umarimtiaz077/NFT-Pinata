@@ -1,23 +1,35 @@
 import React, { useEffect, useState, useContext } from "react";
+import { useRouter } from "next/router";
 
-//INTERNAL IMPORT
+// INTERNAL IMPORT
 import Style from "../styles/upload-nft.module.css";
 import { UploadNFT } from "../UploadNFT/uploadNFTIndex";
 
-//SMART CONTRACT IMPORT
+// SMART CONTRACT IMPORT
 import { NFTMarketplaceContext } from "../Context/NFTMarketplaceContext";
 
-const uploadNFT = () => {
+const UploadNFTPage = () => {
   const { uploadToIPFS, createNFT, uploadToPinata } = useContext(
     NFTMarketplaceContext
   );
+
+  const router = useRouter();
+  const { mediaUrl } = router.query; // Retrieve the mediaUrl from the query
+  const [defaultImage, setDefaultImage] = useState(null);
+
+  useEffect(() => {
+    if (mediaUrl) {
+      setDefaultImage(mediaUrl); // Set the default image from the query
+    }
+  }, [mediaUrl]);
+
   return (
     <div className={Style.uploadNFT}>
       <div className={Style.uploadNFT_box}>
         <div className={Style.uploadNFT_box_heading}>
           <h1>Create New NFT</h1>
           <p>
-            You can set preferred display name, create your profile URL and
+            You can set a preferred display name, create your profile URL, and
             manage other personal settings.
           </p>
         </div>
@@ -35,6 +47,7 @@ const uploadNFT = () => {
             uploadToIPFS={uploadToIPFS}
             createNFT={createNFT}
             uploadToPinata={uploadToPinata}
+            defaultImage={defaultImage} // Pass the defaultImage to the component
           />
         </div>
       </div>
@@ -42,4 +55,4 @@ const uploadNFT = () => {
   );
 };
 
-export default uploadNFT;
+export default UploadNFTPage;

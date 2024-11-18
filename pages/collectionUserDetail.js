@@ -3,11 +3,11 @@ import { useRouter } from "next/router";
 
 //INTERNAL IMPORT
 import { Button, Category, Brand } from "../components/componentsindex";
-import NFTDetailsPage from "../NFTDetailsPage/NFTDetailsPage";
+import NFTDetailsPage from "../NFTDetailsPageColl/NFTDetailsPage";
 
 //IMPORT SMART CONTRACT DATA
 import { NFTMarketplaceContext } from "../Context/NFTMarketplaceContext";
-const NFTDetails = () => {
+const NFTDetailsColl = () => {
   const { currentAccount } = useContext(NFTMarketplaceContext);
 
   const [nft, setNft] = useState({
@@ -34,4 +34,4 @@ const NFTDetails = () => {
   );
 };
 
-export default NFTDetails;
+export default NFTDetailsColl;

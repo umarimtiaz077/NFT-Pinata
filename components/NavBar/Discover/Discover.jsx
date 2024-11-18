@@ -35,6 +35,10 @@ const Discover = () => {
       name: "Create Collection",
       link: "createCollection",
     },
+    {
+      name: "Connect Instagram",
+      link: "ProfilePage",
+    },
   ];
   return (
     <div>

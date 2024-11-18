@@ -4,14 +4,13 @@ import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import { MdTimer } from "react-icons/md";
 import Link from "next/link";
 
-//INTERNAL IMPORT
+// INTERNAL IMPORT
 import Style from "./NFTCardTwo.module.css";
 import { LikeProfile } from "../../components/componentsindex";
 
 const LikeNFTCardTwo = ({ NFTData, wallet_address }) => {
   const [like, setLike] = useState(false);
   const [likeInc, setLikeInc] = useState(21);
-console.log('ssssssssssssssssssssssssssssssss');
 
   const likeNFT = () => {
     if (!like) {
@@ -25,11 +24,10 @@ console.log('ssssssssssssssssssssssssssssssss');
 
   return (
     <div className={Style.NFTCardTwo}>
-      
       {NFTData?.map((el, i) => {
-        // Check if the seller is the same as wallet_address, if not, skip this NFT
+        // Skip rendering NFTs if seller is not the current wallet address
         if (el.seller.toLowerCase() !== wallet_address.toLowerCase()) {
-          return <>{el.seller} == {wallet_address} </>; // Skip rendering this NFT
+          return null; // Do not render anything
         }
 
         return (
@@ -39,7 +37,7 @@ console.log('ssssssssssssssssssssssssssssssss');
                 <div className={Style.NFTCardTwo_box_like_box}>
                   <div className={Style.NFTCardTwo_box_like_box_box}>
                     <BsImage className={Style.NFTCardTwo_box_like_box_box_icon} />
-                    <p onClick={() => likeNFT()}>
+                    <p onClick={likeNFT}>
                       {like ? <AiOutlineHeart /> : <AiFillHeart />}
                       <span>{likeInc + 1}</span>
                     </p>

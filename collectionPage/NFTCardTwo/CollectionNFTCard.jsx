@@ -9,7 +9,7 @@ import Link from "next/link";
 import Style from "./NFTCardTwo.module.css";
 import { LikeProfile } from "../../components/componentsindex";
 
-const MyNFTCard = ({ NFTData }) => {
+const CollectionNFTCard = ({ NFTData }) => {
   const [like, setLike] = useState(false);
   const [likeInc, setLikeInc] = useState(21);
 
@@ -28,7 +28,7 @@ const MyNFTCard = ({ NFTData }) => {
   return (
     <div className={Style.NFTCardTwo}>
       {NFTData?.map((el, i) => (
-        <Link href={{ pathname: "/NFT-details", query: el }} key={i + 1}>
+        <Link href={{ pathname: "/collectionUserDetail", query: el }} key={i + 1}>
           <div className={Style.NFTCardTwo_box} key={i + 1}>
             <div className={Style.NFTCardTwo_box_like}>
               <div className={Style.NFTCardTwo_box_like_box}>
@@ -45,7 +45,7 @@ const MyNFTCard = ({ NFTData }) => {
 
             <div className={Style.NFTCardTwo_box_img}>
               <img
-                src={el.image}
+                src={el.imageUrl}
                 alt="NFT"
                 className={Style.NFTCardTwo_box_img_img}
                 objectFit="cover"
@@ -55,7 +55,7 @@ const MyNFTCard = ({ NFTData }) => {
             <div className={Style.NFTCardTwo_box_info}>
               <div className={Style.NFTCardTwo_box_info_left}>
                 <LikeProfile />
-                <p>{el.name}</p>
+                <p>{el.itemName}</p>
               </div>
               <small>4{i + 2}</small>
             </div>
@@ -76,4 +76,4 @@ const MyNFTCard = ({ NFTData }) => {
   );
 };
 
-export default MyNFTCard;
+export default CollectionNFTCard;

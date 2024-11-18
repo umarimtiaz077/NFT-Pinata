@@ -15,6 +15,7 @@ import LikeNFTCardTwo from "../collectionPage/NFTCardTwo/LikeNFTCard";
 import UserTaps from "../authorPage/AuthorTaps/UserTaps";
 import LikeNFTCard from "../collectionPage/NFTCardTwo/MyLikeNFT";
 import FollowerTabCard from "../components/FollowerTab/FollowerTabCard/FollowerTabCard";
+import FollowerTabCardTwo from "../components/FollowerTab/FollowerTabCard/FollowerTabCardTwo";
 
 const DetailUser = () => {
   const router = useRouter();
@@ -149,7 +150,7 @@ const DetailUser = () => {
       {/* Followers/Following */}
       <div className={Style.author_box}>
         {followersList.map((follower, i) => (
-          <FollowerTabCard key={follower._id || i} i={i} el={follower} />
+          <FollowerTabCardTwo key={follower._id || i} i={i} el={follower} />
         ))}
       </div>
 
