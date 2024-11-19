@@ -10,7 +10,7 @@ const ProfilePage = () => {
   const router = useRouter();
 
   const accessToken =
-    "IGQWRPazR4clBKQzNqQ3lfUnI5ZAk9NU252czE3UHpMWkxnelAzTFBSNGZAucHdpT1hWdUdOeDItTk9TXzRzYmFERXdzeE9IYmJxUUM0VnhkamkyU3VtRU5wV2g1MzNfa3dlSEJ3MzFQZAFZAXX3I2a0tNVVZAhMU1kZAlUZD";
+    "IGQWROQUlaRUxuQzBpY0lxUlVyS2JpZAU1XZATJKOUstUVFwVUVBN2FOTU85N01EQ3ZAEemFmZADNzR2VkMGpzendWdUZAWOWwxYWFpTjR1U2VoZAXUyMFZAqcnY2YkZAZATDVvVk5PRnhyQUlPODVjd2tuTDB6TWFfRzBpODAZD";
 
   const fetchUserProfile = async () => {
     const url = `https://graph.instagram.com/me?fields=id,username,media_count&access_token=${accessToken}`;
@@ -65,13 +65,13 @@ const ProfilePage = () => {
 
   return (
     <div className={styles.profileContainer}>
-      <header className={styles.header}>
+      {/* <header className={styles.header}>
         <div className={styles.headerContainer}>
           <h1 className={styles.headerTitle}>
             <i className={`fab fa-instagram ${styles.headerIcon}`}></i> Instagram
           </h1>
         </div>
-      </header>
+      </header> */}
 
       <main className={styles.main}>
         <div className={styles.mainContainer}>

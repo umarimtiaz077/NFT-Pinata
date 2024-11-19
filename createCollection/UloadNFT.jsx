@@ -13,6 +13,7 @@ const UloadNFT = () => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [image, setImage] = useState(null);
+  const [successMessage, setSuccessMessage] = useState(""); // State for success message
   const router = useRouter();
 
   // Access `userId` from context
@@ -44,9 +45,13 @@ const UloadNFT = () => {
         }
       );
 
-      // Redirect on successful creation
+      // Check if the collection was created successfully
       if (response.status === 201) {
-        console.log("resonce okay")
+        setSuccessMessage("Collection created successfully! Redirecting...");
+        // Redirect to /collectionsPage after 2 seconds
+        setTimeout(() => {
+          router.push("/collectionsPage");
+        }, 2000); // Delay of 2 seconds before redirecting
       }
     } catch (error) {
       console.error("Error creating collection:", error);
@@ -98,6 +103,13 @@ const UloadNFT = () => {
           />
         </div>
       </div>
+
+      {/* Success Message */}
+      {successMessage && (
+        <div className={Style.successMessage}>
+          <p>{successMessage}</p>
+        </div>
+      )}
     </div>
   );
 };

@@ -64,7 +64,6 @@ const CollectionNFTCard = ({ NFTData }) => {
             </div>
 
             <div className={Style.NFTCardTwo_box_img}>
-              {console.log(el.imageUrl.image)}
               <img
                 src={el.imageUrl}
                 alt="NFT"
