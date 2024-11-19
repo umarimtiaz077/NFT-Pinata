@@ -47,6 +47,7 @@ const FollowerTab = ({ isslice, TopCreator }) => {
 
   console.log(popular, following, news, TopCreator);
   
+useEffect()
 
   return (
     <div className={Style.followerTab}>

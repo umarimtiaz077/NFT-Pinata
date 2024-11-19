@@ -29,7 +29,7 @@ const createCollection = () => {
         </div>
 
         <div className={Style.uploadNFT_box_form}>
-          <UploadNFT
+          <UploadNFT 
           />
         </div>
       </div>

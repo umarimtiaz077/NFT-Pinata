@@ -17,6 +17,7 @@ import LikeNFTCard from "../collectionPage/NFTCardTwo/MyLikeNFT";
 import FollowerTabCard from "../components/FollowerTab/FollowerTabCard/FollowerTabCard";
 import FollowerTabCardTwo from "../components/FollowerTab/FollowerTabCard/FollowerTabCardTwo";
 
+
 const DetailUser = () => {
   const router = useRouter();
   const { seller } = router.query;
@@ -117,7 +118,6 @@ const DetailUser = () => {
 
   return (
     <div className={Style.author}>
-      <Banner bannerImage={userData?.background || "/default-background.jpg"} />
 
       {userData && (
         <AuthorProfileCard
@@ -142,10 +142,7 @@ const DetailUser = () => {
         <LikeNFTCard wallet_address={userData?.walletAddress} NFTData={nfts} />
       )}
 
-      <Title
-        heading="Popular Creators"
-        paragraph="Click on music icon and enjoy NFT music or audio"
-      />
+   
 
       {/* Followers/Following */}
       <div className={Style.author_box}>

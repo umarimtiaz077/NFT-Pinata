@@ -28,8 +28,12 @@ const UploadNFT = ({ uploadToIPFS, createNFT, uploadToPinata }) => {
   const [category_id, setCategoryId] = useState("");
   const [properties, setProperties] = useState("");
   const [image, setImage] = useState(null);
+  const [defaultImage, setDefaultImage] = useState(null); // Default image (from query)
+
 
   const router = useRouter();
+  const { mediaUrl } = router.query; // Retrieve mediaUrl from query parameters
+
 
   useEffect(() => {
     // Fetch user collections on component mount
@@ -47,17 +51,30 @@ const UploadNFT = ({ uploadToIPFS, createNFT, uploadToPinata }) => {
     if (userId) fetchUserCollections();
   }, [userId]);
 
+  useEffect(() => {
+    // Set the default image if mediaUrl is provided
+    if (mediaUrl) {
+      setDefaultImage(mediaUrl);
+      setImage(mediaUrl); // Set the default image as the initial image
+    }
+  }, [mediaUrl]);
+
   const handleUpload = async () => {
     try {
       // Step 1: Upload the image to IPFS/Pinata
-      if (!image) {
+      let imageToUpload = image;
+
+      if (!imageToUpload) {
         setError("Image file is missing.");
         setOpenError(true);
         return;
       }
 
       console.log("Uploading image to IPFS/Pinata...");
-      const imageUrl = await uploadToPinata(image); // Upload the image file
+      const imageUrl =
+        typeof imageToUpload === "string" // Check if it's a URL (defaultImage)
+          ? imageToUpload
+          : await uploadToPinata(imageToUpload); // Upload the image file
       console.log("Image URL:", imageUrl);
 
       // Step 2: Create NFT with the returned image URL
@@ -85,6 +102,7 @@ const UploadNFT = ({ uploadToIPFS, createNFT, uploadToPinata }) => {
         setImage={setImage}
         uploadToIPFS={uploadToIPFS}
         uploadToPinata={uploadToPinata}
+        defaultImage={defaultImage} // Pass the defaultImage for DropZone preview
       />
 
       <div className={Style.upload_box}>

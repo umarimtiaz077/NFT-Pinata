@@ -211,7 +211,7 @@ const NFTDescription = ({ nft }) => {
               >
                 <small>Current Bid</small>
                 <p>
-                  {nft.price} .0 ETH <span>( ≈ $3,221.22)</span>
+                  {nft.price} .0  ETH <span>( ≈ $3,221.22)</span>
                 </p>
               </div>
 

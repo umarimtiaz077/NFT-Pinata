@@ -28,6 +28,22 @@ const NavBar = () => {
     NFTMarketplaceContext
   );
 
+  // Reset all menu states on route change
+  useEffect(() => {
+    const handleRouteChange = () => {
+      setDiscover(false);
+      setHelp(false);
+      setNotification(false);
+      setProfile(false);
+      setOpenSideMenu(false);
+    };
+
+    router.events.on("routeChangeStart", handleRouteChange);
+    return () => {
+      router.events.off("routeChangeStart", handleRouteChange);
+    };
+  }, [router]);
+
   // Fetch the user's profile data and set profile image when currentAccount changes
   useEffect(() => {
     const fetchProfileData = async () => {

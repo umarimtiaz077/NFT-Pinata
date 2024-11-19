@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { useDropzone } from "react-dropzone";
 import Image from "next/image";
 
@@ -20,6 +20,7 @@ const DropZone = ({
   uploadToIPFS,
   uploadToPinata,
   setImage,
+  defaultImage, // Accept the default image as a prop
 }) => {
   const [fileUrl, setFileUrl] = useState(null);
 
@@ -42,6 +43,13 @@ const DropZone = ({
 
 
   // DropZone component code remains largely the same
+  useEffect (() => {
+    // If a defaultImage is provided, set it as the initial fileUrl
+    if (defaultImage) {
+      setFileUrl(defaultImage);
+      setImage(defaultImage); // Set the defaultImage as the initial image
+    }
+  }, [defaultImage, setImage]);
 
 const onDrop = useCallback(async (acceptedFiles) => {
   const file = acceptedFiles[0];
@@ -62,24 +70,38 @@ const onDrop = useCallback(async (acceptedFiles) => {
   });
   return (
     <div className={Style.DropZone}>
-      <div className={Style.DropZone_box} {...getRootProps()}>
-        <input {...getInputProps()} />
-        <div className={Style.DropZone_box_input}>
-          <p>{title}</p>
-          <div className={Style.DropZone_box_input_img}>
-            <Image
-              src={images.upload}
-              alt="upload"
-              width={100}
-              height={100}
-              objectFit="contain"
-              className={Style.DropZone_box_input_img_img}
-            />
-          </div>
-          <p>{heading}</p>
-          <p>{subHeading}</p>
-        </div>
+    <div className={Style.DropZone_box} {...getRootProps()}>
+      <input {...getInputProps()} />
+      <div className={Style.DropZone_box_input}>
+        {fileUrl ? (
+          // If there's a file URL, display it as a preview
+          <img
+            src={fileUrl}
+            alt="Selected file preview"
+            width={100}
+            height={100}
+            className={Style.DropZone_box_input_img_img}
+          />
+        ) : (
+          // If no file URL, display the default upload image
+          <>
+            <p>{title}</p>
+            <div className={Style.DropZone_box_input_img}>
+              <Image
+                src={images.upload}
+                alt="upload"
+                width={100}
+                height={100}
+                objectFit="contain"
+                className={Style.DropZone_box_input_img_img}
+              />
+            </div>
+            <p>{heading}</p>
+            <p>{subHeading}</p>
+          </>
+        )}
       </div>
+    </div>
 
       {fileUrl && (
         <aside className={Style.DropZone_box_aside}>

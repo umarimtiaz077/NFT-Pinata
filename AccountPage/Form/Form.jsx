@@ -1,16 +1,18 @@
-// Form.js (Child Component)
-import React, { useState,useContext,useEffect } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import axios from "axios";
 import { HiOutlineMail } from "react-icons/hi";
 import { MdOutlineHttp, MdOutlineContentCopy } from "react-icons/md";
 import { TiSocialFacebook, TiSocialTwitter, TiSocialInstagram } from "react-icons/ti";
 import { NFTMarketplaceContext } from "../../Context/NFTMarketplaceContext.js";
+import { useRouter } from "next/router"; // Import useRouter from next/router
+
 // INTERNAL IMPORT
 import Style from "./Form.module.css";
 import { Button } from "../../components/componentsindex.js";
 
 const Form = ({ fileUrl }) => {
-  const { currentAccount,userId } = useContext(NFTMarketplaceContext);
+  const { currentAccount, userId } = useContext(NFTMarketplaceContext);
+  const router = useRouter(); // Initialize useRouter
 
   // State for form inputs
   const [username, setUsername] = useState("");
@@ -21,15 +23,13 @@ const Form = ({ fileUrl }) => {
   const [twitter, setTwitter] = useState("");
   const [instagram, setInstagram] = useState("");
   const [walletAddress, setWalletAddress] = useState(currentAccount || "");
+  const [successMessage, setSuccessMessage] = useState(""); // State for success message
 
   useEffect(() => {
-    console.log("useeffect runs");
-    console.log("userId is...",userId)
     if (userId) {
       // Fetch profile data on load if userId exists
       const fetchProfile = async () => {
         try {
-          console.log("user id is ...",userId)
           const response = await axios.get(`http://localhost:5000/api/users/profile/${userId}`);
           const profileData = response.data;
           // Populate form fields with fetched data
@@ -61,11 +61,17 @@ const Form = ({ fileUrl }) => {
     try {
       const formData = new FormData();
 
+      // Ensure the website URL starts with http:// or https://
+      let formattedWebsite = website;
+      if (formattedWebsite && !formattedWebsite.startsWith("http://") && !formattedWebsite.startsWith("https://")) {
+        formattedWebsite = "http://" + formattedWebsite; // Prepend http:// if missing
+      }
+
       // Append profile data to FormData
       formData.append("username", username);
       formData.append("email", email);
       formData.append("description", description);
-      formData.append("website", website);
+      formData.append("website", formattedWebsite); // Use the correctly formatted URL
       formData.append("socialLinks[facebook]", facebook);
       formData.append("socialLinks[twitter]", twitter);
       formData.append("socialLinks[instagram]", instagram);
@@ -84,6 +90,14 @@ const Form = ({ fileUrl }) => {
       });
 
       console.log("Profile updated:", response.data);
+
+      // Show success message
+      setSuccessMessage("Profile updated successfully!");
+
+      // Redirect to /author after 2 seconds
+      setTimeout(() => {
+        router.push("/author"); // Redirect to the author page using Next.js router
+      }, 2000);
     } catch (error) {
       console.error("Error updating profile:", error);
     }
@@ -222,6 +236,11 @@ const Form = ({ fileUrl }) => {
             <Button btnName="Upload profile" classStyle={Style.button} handleClick={handleSubmit} />
           </div>
         </form>
+        {successMessage && (
+          <div className={Style.successMessage}>
+            <p>{successMessage}</p>
+          </div>
+        )}
       </div>
     </div>
   );
